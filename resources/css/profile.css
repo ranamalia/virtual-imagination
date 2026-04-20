@@ -1,0 +1,580 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.profile-page-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-dark);
+    letter-spacing: -0.3px;
+}
+
+/* ── PAGE WRAPPER ── */
+.profile-page-container {
+    display: flex;
+    gap: 28px;
+    max-width: 1100px;
+    margin: 32px auto;
+    padding: 0 24px;
+    align-items: stretch; /* Biar sidebar dan content sama tinggi */
+}
+
+/* =============================================
+   SIDEBAR
+============================================= */
+.profile-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: linear-gradient(160deg, var(--color-primary) 0%, #F5F0E1 100%);
+    border-radius: 20px;
+    padding: 28px 20px;
+    border: 2.5px solid var(--color-dark);
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 450px;
+    height: 90%;
+}
+
+.profile-avatar-block {
+    text-align: center;
+    padding-bottom: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(7, 7, 7, 0.12);
+}
+
+.profile-avatar-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--color-dark);
+    color: var(--color-primary);
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    border: 3px solid var(--color-dark);
+}
+
+.profile-avatar-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-dark);
+    margin-bottom: 4px;
+}
+
+.profile-avatar-email {
+    font-size: 0.78rem;
+    color: #5a5040;
+    word-break: break-all;
+}
+
+/* ── SIDEBAR NAV ── */
+.profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--color-dark);
+    background: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.profile-nav-item svg {
+    stroke: var(--color-dark);
+    flex-shrink: 0;
+}
+
+.profile-nav-item:hover {
+    background: rgba(7, 7, 7, 0.08);
+    border-color: rgba(7, 7, 7, 0.15);
+}
+
+.profile-nav-item.active {
+    background: var(--color-dark);
+    color: var(--color-primary);
+    border-color: var(--color-dark);
+}
+
+.profile-nav-item.active svg {
+    stroke: var(--color-primary);
+}
+
+.profile-nav-danger {
+    color: #d32f2f;
+}
+
+.profile-nav-danger svg {
+    stroke: #d32f2f;
+}
+
+.profile-nav-danger:hover {
+    background: rgba(211, 47, 47, 0.08);
+    border-color: rgba(211, 47, 47, 0.2);
+}
+
+.profile-nav-danger.active {
+    background: #d32f2f;
+    color: var(--color-white);
+    border-color: #d32f2f;
+}
+
+.profile-nav-danger.active svg {
+    stroke: var(--color-white);
+}
+
+/* =============================================
+   CONTENT AREA & TABS
+============================================= */
+.profile-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.profile-tab-panel {
+    display: none;
+}
+
+.profile-tab-panel.active {
+    display: block;
+}
+
+/* =============================================
+   CARD
+============================================= */
+.profile-card {
+    background: linear-gradient(160deg, var(--color-primary) 0%, #F5F0E1 100%);
+    border-radius: 20px;
+    border: 2.5px solid var(--color-dark);
+    padding: 36px 40px;
+    width: 100%;
+    min-width: 0;
+    min-height: 450px;
+    box-sizing: border-box;
+}
+
+.profile-card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-dark);
+    margin-bottom: 6px;
+    letter-spacing: -0.4px;
+}
+
+.profile-card-desc {
+    font-size: 0.9rem;
+    color: #5a5040;
+    margin-bottom: 30px;
+    font-weight: 500;
+}
+
+.profile-card-danger {
+    background: linear-gradient(160deg, rgba(211, 47, 47, 0.08) 0%, #F5F0E1 100%);
+    border-color: #d32f2f;
+}
+
+.profile-card-danger .profile-card-title {
+    color: #d32f2f;
+}
+
+/* =============================================
+   FORM ELEMENTS
+============================================= */
+.pf-form-group {
+    margin-bottom: 22px;
+}
+
+.pf-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6D6D6D;
+    margin-bottom: 8px;
+}
+
+.pf-input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 2.5px solid var(--color-dark);
+    border-radius: 12px;
+    background: var(--color-white);
+    font-size: 1rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 500;
+    color: var(--color-dark);
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.pf-input:focus {
+    outline: none;
+    border-color: var(--color-dark);
+    box-shadow: 0 0 0 3px rgba(7, 7, 7, 0.1);
+}
+
+.pf-input::placeholder {
+    color: #bbb;
+}
+
+.pf-input-error {
+    border-color: #d32f2f !important;
+}
+
+.pf-error-text {
+    font-size: 0.82rem;
+    color: #d32f2f;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.pf-password-wrapper {
+    position: relative;
+}
+
+.pf-password-wrapper .pf-input {
+    padding-right: 3rem;
+}
+
+.pf-eye-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6D6D6D;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.pf-eye-btn:hover {
+    color: var(--color-dark);
+}
+
+/* =============================================
+   GRID HELPERS
+============================================= */
+.pf-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* =============================================
+   BUTTONS
+============================================= */
+.pf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.85rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 2.5px solid transparent;
+}
+
+.pf-btn-primary {
+    background: var(--color-dark);
+    color: var(--color-primary);
+    border-color: var(--color-dark);
+}
+
+.pf-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(7, 7, 7, 0.2);
+}
+
+.pf-btn-danger {
+    background: #d32f2f;
+    color: var(--color-white);
+    border-color: #d32f2f;
+}
+
+.pf-btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+}
+
+.pf-btn-outline {
+    background: transparent;
+    color: var(--color-dark);
+    border-color: var(--color-dark);
+}
+
+.pf-btn-outline:hover {
+    background: rgba(7, 7, 7, 0.05);
+}
+
+/* =============================================
+   SUCCESS ALERT
+============================================= */
+.pf-success {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(7, 7, 7, 0.06);
+    border: 2px solid var(--color-dark);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+/* =============================================
+   VERIFY EMAIL BANNER
+============================================= */
+.pf-verify-banner {
+    padding: 12px 16px;
+    background: rgba(204, 176, 73, 0.15);
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    font-size: 0.88rem;
+    color: #5a4a10;
+    margin-bottom: 20px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.pf-verify-banner a {
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+/* =============================================
+   PASSWORD STRENGTH METER
+============================================= */
+.pf-strength-bar-wrap {
+    margin-bottom: 20px;
+}
+
+.pf-strength-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.pf-strength-label-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.pf-strength-track {
+    height: 6px;
+    background: rgba(7, 7, 7, 0.1);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.pf-strength-fill {
+    height: 100%;
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* =============================================
+   DANGER ZONE INFO LIST
+============================================= */
+.pf-danger-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+    padding: 18px 20px;
+    background: rgba(211, 47, 47, 0.06);
+    border: 2px solid rgba(211, 47, 47, 0.2);
+    border-radius: 14px;
+}
+
+.pf-danger-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #7a1010;
+}
+
+.pf-danger-info-item svg {
+    stroke: #d32f2f;
+    flex-shrink: 0;
+}
+
+/* =============================================
+   MODAL
+============================================= */
+.pf-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 7, 7, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.pf-modal-overlay.open {
+    display: flex;
+}
+
+.pf-modal {
+    background: var(--color-white);
+    border-radius: 20px;
+    border: 2.5px solid var(--color-dark);
+    padding: 36px 40px;
+    max-width: 460px;
+    width: 90%;
+    animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+    from {
+        transform: scale(0.93) translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.pf-modal-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(211, 47, 47, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.pf-modal-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--color-dark);
+    margin-bottom: 8px;
+}
+
+.pf-modal-desc {
+    font-size: 0.9rem;
+    color: #6D6D6D;
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.pf-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+    .profile-page-container {
+        flex-direction: column;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .profile-avatar-block {
+        display: none;
+    }
+
+    .profile-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .profile-nav-item {
+        flex: 1;
+        min-width: 140px;
+        justify-content: center;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .profile-page-container {
+        padding: 0 16px;
+        margin: 20px auto;
+        gap: 16px;
+    }
+
+    .profile-card {
+        padding: 24px 20px;
+    }
+
+    .pf-grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-nav-item {
+        padding: 10px 12px;
+        font-size: 0.82rem;
+    }
+
+    .pf-btn {
+        padding: 0.8rem 1.4rem;
+        font-size: 0.95rem;
+    }
+
+    .pf-modal {
+        padding: 28px 22px;
+    }
+
+    .profile-card-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .pf-modal-actions {
+        flex-direction: column;
+    }
+
+    .pf-modal-actions .pf-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
