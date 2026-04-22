@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import './profile.css';
+@import './navbar.css';
 
 @tailwind base;
 @tailwind components;
@@ -351,6 +352,213 @@ body {
     display: block;
   }
 }
+        /* ===== NAVBAR CORE ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* State saat di-scroll */
+        .navbar.scrolled {
+            padding: 14px 60px;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .navbar-logo img {
+        height: 48px; /* Ukuran dasar */
+        width: auto;
+        transition: all 0.3s ease;
+        transform: scale(1.5); /* 1.5 berarti diperbesar 150% */
+        transform-origin: left center; /* Supaya membesarnya ke arah kanan, bukan ke kiri */
+    }
+
+    /* Jika ingin logo mengecil kembali saat navbar di-scroll */
+    .navbar.scrolled .navbar-logo img {
+        transform: scale(1.2);
+    }
+
+        /* ===== MENU NAVIGATION ===== */
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            gap: 100px;
+            list-style: none;
+        }
+
+        .navbar-menu li a,
+        .navbar-menu li .nav-link {
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: 0.1em;
+            color: #222;
+            text-decoration: none;
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .navbar-menu li a:hover,
+        .navbar-menu li .nav-link:hover {
+            color: #c9a94a;
+        }
+
+        /* Garis bawah animasi */
+        .navbar-menu li a::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 18px;
+            width: 0;
+            height: 2px;
+            background: #c9a94a;
+            transition: width 0.3s ease;
+        }
+
+        .navbar-menu li a:hover::after {
+            width: calc(100% - 36px);
+        }
+
+        .nav-arrow {
+            font-size: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover .nav-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* ===== DROPDOWN ANIMATION ===== */
+        .dropdown-menu, .profile-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            min-width: 200px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 8px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            pointer-events: none;
+        }
+
+        .dropdown:hover .dropdown-menu,
+        .profile-dropdown:hover .profile-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px);
+            pointer-events: auto;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            font-size: 13px;
+            color: #444;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #fcf9f0;
+            color: #c9a94a;
+            padding-left: 25px;
+        }
+
+        /* ===== AUTH & PROFILE ===== */
+        .navbar-auth {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-login {
+            background: #c9a94a;
+            color: #fff;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201, 169, 74, 0.2);
+        }
+
+        .btn-login:hover {
+            background: #b39339;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 169, 74, 0.3);
+        }
+
+        .profile-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50px;
+            transition: background 0.3s;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #c9a94a, #e9cb5b);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .profile-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-dropdown-menu {
+            left: auto;
+            right: 0;
+            min-width: 220px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 8px 0;
+        }
+
+        .logout {
+            color: #dc3545 !important;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background: #fff5f5 !important;
+        }
+
 
 /* Mobile */
 @media (max-width: 768px) {
