@@ -1,0 +1,133 @@
+<x-admin-layout>
+    <x-slot name="title">Tambah Paket Foto</x-slot>
+
+    <style>
+        .back-link {
+            display:inline-flex; align-items:center; gap:6px;
+            font-size:13px; color:var(--text-mid); text-decoration:none;
+            margin-bottom:20px; transition:color var(--transition);
+        }
+        .back-link:hover { color:var(--gold-dark); }
+
+        .form-card {
+            background:var(--surface); border:1px solid var(--border);
+            border-radius:var(--radius-md); padding:32px; max-width:640px;
+        }
+        .form-title {
+            font-family:'Cormorant Garamond',serif; font-size:22px;
+            font-weight:600; color:var(--ink); margin-bottom:24px;
+        }
+        .form-group { margin-bottom:20px; }
+        .form-label { display:block; font-size:13px; font-weight:600; color:var(--text-hi); margin-bottom:8px; }
+        .form-label span { color:var(--danger); }
+        .form-input {
+            width:100%; padding:10px 14px; border:1px solid var(--border);
+            border-radius:var(--radius-sm); font-family:'DM Sans',sans-serif;
+            font-size:14px; color:var(--ink); background:var(--surface-2);
+            outline:none; transition:border-color var(--transition);
+        }
+        .form-input:focus { border-color:var(--gold); background:var(--surface); }
+        textarea.form-input { resize:vertical; min-height:100px; }
+        .form-error { font-size:12px; color:var(--danger); margin-top:5px; }
+        .form-hint  { font-size:12px; color:var(--text-lo); margin-top:5px; }
+
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+        /* Toggle Switch */
+        .toggle-wrap { display:flex; align-items:center; gap:12px; }
+        .toggle-label { font-size:14px; color:var(--text-mid); }
+        .toggle {
+            width:44px; height:24px; background:var(--border); border-radius:12px;
+            position:relative; cursor:pointer; transition:background var(--transition);
+            appearance:none; outline:none; border:none;
+        }
+        .toggle:checked { background:var(--gold); }
+        .toggle::after {
+            content:''; width:18px; height:18px; background:#fff;
+            border-radius:50%; position:absolute; top:3px; left:3px;
+            transition:transform var(--transition);
+        }
+        .toggle:checked::after { transform:translateX(20px); }
+
+        .form-actions { display:flex; gap:12px; margin-top:28px; }
+        .btn-save {
+            padding:11px 28px; background:var(--gold); color:var(--ink);
+            border:none; border-radius:var(--radius-sm); font-size:14px;
+            font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif;
+            transition: background var(--transition);
+        }
+        .btn-save:hover { background:var(--gold-dark); color:#fff; }
+        .btn-cancel {
+            padding:11px 20px; background:transparent; border:1px solid var(--border);
+            border-radius:var(--radius-sm); font-size:14px; font-weight:500;
+            color:var(--text-mid); text-decoration:none; transition: all var(--transition);
+        }
+        .btn-cancel:hover { border-color:var(--gold); color:var(--gold-dark); }
+    </style>
+
+    <a href="{{ route('admin.packages.index') }}" class="back-link">← Kembali ke Paket Foto</a>
+
+    <div class="form-card">
+        <div class="form-title">Tambah Paket Foto Baru</div>
+
+        <form method="POST" action="{{ route('admin.packages.store') }}" enctype="multipart/form-data">
+            @csrf
+
+            <!-- Nama -->
+            <div class="form-group">
+                <label class="form-label" for="name">Nama Paket <span>*</span></label>
+                <input type="text" id="name" name="name" class="form-input"
+                       value="{{ old('name') }}" required placeholder="cth: Premium Wedding">
+                @error('name')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <!-- Deskripsi -->
+            <div class="form-group">
+                <label class="form-label" for="description">Deskripsi</label>
+                <textarea id="description" name="description" class="form-input"
+                          placeholder="Deskripsi paket…">{{ old('description') }}</textarea>
+                @error('description')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <!-- Harga & Durasi -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="price">Harga (Rp) <span>*</span></label>
+                    <input type="number" id="price" name="price" class="form-input"
+                           value="{{ old('price') }}" required min="0" placeholder="500000">
+                    @error('price')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="duration_minutes">Durasi (menit) <span>*</span></label>
+                    <input type="number" id="duration_minutes" name="duration_minutes" class="form-input"
+                           value="{{ old('duration_minutes', 60) }}" required min="1">
+                    @error('duration_minutes')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+
+            <!-- Thumbnail -->
+            <div class="form-group">
+                <label class="form-label" for="thumbnail">Thumbnail (opsional)</label>
+                <input type="file" id="thumbnail" name="thumbnail" class="form-input" accept="image/*">
+                <div class="form-hint">Format JPG, PNG, WEBP. Maks 2MB.</div>
+                @error('thumbnail')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <!-- Status -->
+            <div class="form-group">
+                <label class="form-label">Status Paket</label>
+                <div class="toggle-wrap">
+                    <input type="checkbox" id="is_active" name="is_active" class="toggle"
+                           value="1" {{ old('is_active', true) ? 'checked' : '' }}>
+                    <label for="is_active" class="toggle-label">Paket Aktif (tampil di form booking)</label>
+                </div>
+                @error('is_active')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Simpan Paket</button>
+                <a href="{{ route('admin.packages.index') }}" class="btn-cancel">Batal</a>
+            </div>
+        </form>
+    </div>
+</x-admin-layout>
