@@ -13,6 +13,7 @@ class Booking extends Model
     public    $incrementing = false;
 
     protected $fillable = [
+        'user_id',
         'package_id',
         'full_name',
         'email',
@@ -35,10 +36,19 @@ class Booking extends Model
         'updated_at'   => 'datetime',
     ];
 
+    // ── Relationships ──────────────────────────────────────────────────────────
+
     public function package()
     {
         return $this->belongsTo(Package::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────────────────
 
     public static function generateBookingReference(): string
     {
@@ -56,7 +66,7 @@ class Booking extends Model
                 $model->booking_reference = self::generateBookingReference();
             }
             if (empty($model->status)) {
-                $model->status = 'Pending';
+                $model->status = 'pending';
             }
         });
     }

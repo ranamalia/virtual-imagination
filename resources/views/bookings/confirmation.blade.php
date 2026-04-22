@@ -305,7 +305,8 @@
 
     {{-- Buttons --}}
     <div class="btns">
-        <a href="{{ route('bookings.create') }}" class="bn">Buat Booking Baru</a>
+        <a href="{{ route('bookings.index') }}" class="bn">Lihat Semua Booking Saya</a>
+        <a href="{{ route('bookings.create') }}" class="bh">Buat Booking Baru</a>
         <a href="/" class="bh">Kembali ke Beranda</a>
     </div>
 

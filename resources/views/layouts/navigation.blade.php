@@ -103,7 +103,7 @@
             align-items: center;
             gap: 70px;
             list-style: none;
-            margin-left: 80px; /* naikkan untuk geser ke kanan, turunkan untuk ke kiri */
+            margin-left: 80px;
         }
 
         .navbar-menu > li {
@@ -199,7 +199,6 @@
                 visibility 0.3s;
         }
 
-        /* little notch/arrow at top */
         .dropdown-menu::before {
             content: '';
             position: absolute;
@@ -257,7 +256,6 @@
             transform: scaleY(1);
         }
 
-        /* Stagger dropdown items */
         .dropdown-menu a:nth-child(1) { transition-delay: 0.02s; }
         .dropdown-menu a:nth-child(2) { transition-delay: 0.04s; }
         .dropdown-menu a:nth-child(3) { transition-delay: 0.06s; }
@@ -294,7 +292,6 @@
             box-shadow: 0 4px 18px var(--gold-shadow);
         }
 
-        /* Shimmer sweep on hover */
         .btn-login::before {
             content: '';
             position: absolute;
@@ -418,7 +415,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Profile menu header */
         .profile-menu-header {
             display: flex;
             align-items: center;
@@ -606,40 +602,6 @@
         .drawer-sub a:hover { color: var(--gold); }
         .drawer-sub.open { display: block; }
 
-        /* ===== DEMO PAGE CONTENT ===== */
-        .page-hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 16px;
-            background: linear-gradient(150deg, #fffbe6 0%, #fff9dd 40%, #fff 100%);
-            text-align: center;
-            padding: 40px;
-        }
-
-        .page-hero h1 {
-            font-size: clamp(48px, 8vw, 110px);
-            font-weight: 800;
-            line-height: 1;
-            letter-spacing: -3px;
-        }
-
-        .page-hero h1 span {
-            background: linear-gradient(90deg, #E9CB5B, #C9A94A);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-hero p {
-            font-size: 18px;
-            color: var(--ink-muted);
-            max-width: 480px;
-            font-weight: 400;
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .navbar { padding: 0 28px; }
@@ -662,7 +624,6 @@
             animation: navSlideDown 0.6s var(--ease-out-expo) both;
         }
 
-        /* Gold pulse on logo load */
         @keyframes logoPulse {
             0%   { filter: drop-shadow(0 0 0px transparent); }
             50%  { filter: drop-shadow(0 0 20px rgba(233,203,91,0.5)); }
@@ -847,7 +808,7 @@ document.addEventListener('DOMContentLoaded', function () {
         lastScroll = sy;
     }, { passive: true });
 
-    /* 2. ACTIVE LINK — highlight current nav item */
+    /* 2. ACTIVE LINK */
     document.querySelectorAll('.navbar-menu > li > a').forEach(link => {
         link.addEventListener('click', function () {
             document.querySelectorAll('.navbar-menu > li > a').forEach(l => l.removeAttribute('style'));
@@ -855,7 +816,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    /* 3. DROPDOWN — animate individual items on open */
+    /* 3. DROPDOWN — animate items on open */
     document.querySelectorAll('.dropdown').forEach(dd => {
         dd.addEventListener('mouseenter', () => {
             const items = dd.querySelectorAll('.dropdown-menu a');

@@ -13,6 +13,7 @@ class Package extends Model
         'price',
         'duration_minutes',
         'is_active',
+        'thumbnail',
     ];
 
     protected $casts = [
