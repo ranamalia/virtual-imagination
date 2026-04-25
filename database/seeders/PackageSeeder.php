@@ -4,48 +4,125 @@ namespace Database\Seeders;
 
 use App\Models\Package;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class PackageSeeder extends Seeder
 {
     public function run(): void
     {
         $packages = [
+            // ── PRICELIST 2026 PACKAGES ──────────────────────────────────────────
             [
-                'name'             => 'Basic Photography',
-                'slug'             => 'basic-photography',
-                'description'      => 'Sesi foto profesional 1 jam, 10 foto editan digital siap cetak.',
+                'name'             => 'Photo Graduation SILVER Package',
+                'category'         => 'graduation',
+                'description'      => [
+                    'Unlimited shot',
+                    'All file koreksi upload Google Drive',
+                    'Cetak 10R, 2 lembar',
+                    '15 file edited tone',
+                ],
                 'price'            => 300000,
+                'duration_minutes' => 30,
+                'max_person'       => 6,
+                'is_active'        => true,
+            ],
+            [
+                'name'             => 'Photo Graduation GOLD Package',
+                'category'         => 'graduation',
+                'description'      => [
+                    'Unlimited shot',
+                    'All file koreksi upload Google Drive',
+                    'Cetak 10R, 5 lembar',
+                    '1 frame minimalis',
+                    '30 file edited tone',
+                ],
+                'price'            => 550000,
                 'duration_minutes' => 60,
+                'max_person'       => 10,
                 'is_active'        => true,
             ],
             [
-                'name'             => 'Prewedding',
-                'slug'             => 'prewedding',
-                'description'      => 'Sesi foto prewedding outdoor/indoor, 3 jam, 30 foto editan + album digital.',
-                'price'            => 1500000,
-                'duration_minutes' => 180,
+                'name'             => 'Photo Family Package',
+                'category'         => 'family',
+                'description'      => [
+                    'Unlimited shot',
+                    'All file koreksi upload Google Drive',
+                    'Cetak 10RL, 2 lembar',
+                    '15 file edited tone',
+                ],
+                'price'            => 300000,
+                'duration_minutes' => 30,
+                'max_person'       => 6,
                 'is_active'        => true,
             ],
             [
-                'name'             => 'Event Coverage',
-                'slug'             => 'event-coverage',
-                'description'      => 'Liputan foto event selama 4 jam, full-resolution galeri digital.',
-                'price'            => 500000,
-                'duration_minutes' => 240,
+                'name'             => 'Photo Maternity Package',
+                'category'         => 'maternity',
+                'description'      => [
+                    'Unlimited shot',
+                    'All file koreksi upload Google Drive',
+                    'Cetak 10RL, 2 lembar',
+                    '30 file edited tone',
+                ],
+                'price'            => 550000,
+                'duration_minutes' => 60,
+                'max_person'       => null,
                 'is_active'        => true,
             ],
             [
-                'name'             => 'Videography',
-                'slug'             => 'videography',
-                'description'      => 'Produksi video sinematik 3 jam, hasil edit 5–10 menit full HD.',
-                'price'            => 800000,
+                'name'             => 'Photo Group Package',
+                'category'         => 'group',
+                'description'      => [
+                    'Unlimited shot',
+                    'All file koreksi upload Google Drive',
+                    'Cetak 10RL, 2 lembar',
+                    '25 file edited tone',
+                ],
+                'price'            => 400000,
+                'duration_minutes' => 60,
+                'max_person'       => 10,
+                'is_active'        => true,
+            ],
+            [
+                'name'             => 'Prewedding SILVER Package',
+                'category'         => 'prewedding',
+                'description'      => [
+                    'Background 2 tema',
+                    'Cetak foto 12RL 1 lembar + laminasi',
+                    'Frame minimalis',
+                    'Cetak 8RL 2 lembar',
+                    'All file koreksi upload Google Drive',
+                    '30 file editing tone',
+                ],
+                'price'            => 850000,
+                'duration_minutes' => 120,
+                'is_active'        => true,
+            ],
+            [
+                'name'             => 'Prewedding Indoor GOLD Package',
+                'category'         => 'prewedding',
+                'description'      => [
+                    'Background all tema',
+                    'Cetak foto 16RL 1 lembar + laminasi',
+                    'Frame minimalis',
+                    'Cetak 10R 4 lembar',
+                    'All file koreksi upload Google Drive',
+                    '40 file editing tone',
+                ],
+                'price'            => 1000000,
                 'duration_minutes' => 180,
                 'is_active'        => true,
             ],
         ];
 
         foreach ($packages as $data) {
-            Package::firstOrCreate(['slug' => $data['slug']], $data);
+            $slug = Str::slug($data['name']);
+            $data['slug'] = $slug;
+
+            Package::updateOrCreate(
+                ['slug' => $slug],
+                $data
+            );
         }
     }
 }

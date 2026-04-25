@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation — Virtual Imagination</title>
+    <title>Booking Studio — Virtual Imagination</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -38,10 +38,21 @@
             color: var(--text-hi);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 32px 16px;
+            padding: 32px 16px 60px;
         }
+
+        /* ── Back link ── */
+        .back-wrap {
+            width: 100%; max-width: 540px; margin-bottom: 16px;
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 13px; font-weight: 600; color: var(--text-mid);
+            text-decoration: none; transition: color var(--transition);
+        }
+        .back-link:hover { color: var(--ink); }
 
         /* ── Card ── */
         .card {
@@ -67,7 +78,6 @@
             justify-content: space-between;
             margin-bottom: 32px;
         }
-
         .logo-mark {
             width: 40px; height: 40px;
             background: var(--gold);
@@ -77,20 +87,21 @@
             font-size: 22px; font-weight: 600; font-style: italic;
             color: #fff;
         }
-
         .header-title {
             flex: 1; text-align: center;
             font-size: 10px; font-weight: 600;
             letter-spacing: 4px; text-transform: uppercase;
             color: var(--text-lo);
         }
-
-        .header-avatar {
-            width: 40px; height: 40px;
-            border: 1.5px solid var(--border-hi);
-            border-radius: 50%;
+        .header-user {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 12px; font-weight: 600; color: var(--text-mid);
+        }
+        .header-user .avatar {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: var(--gold); color: #fff;
             display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 18px;
+            font-size: 13px; font-weight: 700;
         }
 
         /* ── Tagline ── */
@@ -171,7 +182,7 @@
             cursor: pointer;
         }
 
-        textarea { resize: vertical; min-height: 70px; }
+        textarea { resize: vertical; min-height: 80px; }
 
         .error-msg {
             display: flex; align-items: center; gap: 5px;
@@ -183,147 +194,46 @@
             display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
 
-        /* ── Payment Method Tabs ── */
-        .pm-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 20px; }
-        .pm-tab {
-            flex: 1; padding: 12px 10px; text-align: center; cursor: pointer;
-            font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-            color: var(--text-mid); background: #fff;
-            border: none; transition: all var(--transition);
-            display: flex; align-items: center; justify-content: center; gap: 7px;
-        }
-        .pm-tab:first-child { border-right: 1px solid var(--border); }
-        .pm-tab.active { background: var(--gold); color: #fff; }
-        .pm-tab input[type="radio"] { display: none; }
-
-        /* ── Transfer Info ── */
-        .transfer-info { display: none; }
-        .transfer-info.show { display: block; }
-
-        .bank-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
-        .bank-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 13px 16px;
-            background: #fff; border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-        }
-        .bank-left { display: flex; align-items: center; gap: 12px; }
-        .bank-logo {
-            width: 44px; height: 28px;
-            border-radius: 4px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: 700; letter-spacing: .5px; color: #fff;
-            flex-shrink: 0;
-        }
-        .bank-logo.bca  { background: #005bab; }
-        .bank-logo.bni  { background: #f77f00; }
-        .bank-logo.mdr  { background: #003d79; }
-        .bank-logo.bri  { background: #00579b; }
-
-        .bank-name { font-size: 13px; font-weight: 600; color: var(--text-hi); }
-        .bank-holder { font-size: 11px; color: var(--text-lo); margin-top: 1px; }
-        .bank-number {
-            font-size: 14px; font-weight: 700; color: var(--text-hi);
-            letter-spacing: .5px; font-family: monospace;
-        }
-        .copy-btn {
-            margin-left: 10px; padding: 4px 10px;
-            background: var(--surface-2); border: 1px solid var(--border);
-            border-radius: 4px; font-size: 10px; font-weight: 600;
-            color: var(--text-mid); cursor: pointer; transition: all var(--transition);
-            white-space: nowrap;
-        }
-        .copy-btn:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
-        .copy-btn.copied { background: #4CAF50; color: #fff; border-color: #4CAF50; }
-
-        /* ── QRIS Info ── */
-        .qris-info { display: none; }
-        .qris-info.show { display: block; }
-
-        .qris-box {
-            background: #fff; border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 24px; text-align: center; margin-bottom: 6px;
-        }
-        .qris-code {
-            width: 180px; height: 180px; margin: 0 auto 16px;
-            background: var(--surface-3);
-            border-radius: 8px; position: relative; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
-        /* Dummy QR pattern */
-        .qris-code svg { width: 160px; height: 160px; }
-        .qris-label { font-size: 13px; font-weight: 600; color: var(--text-hi); margin-bottom: 4px; }
-        .qris-sub { font-size: 11px; color: var(--text-lo); }
-
-        /* ── Upload Bukti ── */
-        .upload-section { margin-top: 18px; }
-        .upload-box {
-            border: 2px dashed var(--border);
-            border-radius: var(--radius-md);
-            padding: 28px 20px;
-            text-align: center; cursor: pointer;
-            transition: all var(--transition);
-            background: var(--surface-2);
-            position: relative;
-        }
-        .upload-box:hover { border-color: var(--gold); background: rgba(204,176,73,.03); }
-        .upload-box.dragging { border-color: var(--gold); background: rgba(204,176,73,.06); }
-        .upload-box input[type="file"] {
-            position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-        }
-        .upload-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-        .upload-title { font-size: 13px; font-weight: 600; color: var(--text-hi); margin-bottom: 5px; }
-        .upload-sub { font-size: 11px; color: var(--text-lo); }
-        .upload-sub span { color: var(--gold); font-weight: 600; }
-
-        .preview-wrap {
-            display: none; margin-top: 12px;
-            border: 1px solid var(--border); border-radius: var(--radius-sm);
-            overflow: hidden; position: relative;
-        }
-        .preview-wrap img { width: 100%; max-height: 200px; object-fit: cover; display: block; }
-        .preview-remove {
-            position: absolute; top: 8px; right: 8px;
-            width: 28px; height: 28px; border-radius: 50%;
-            background: rgba(0,0,0,.55); color: #fff; border: none;
-            font-size: 14px; cursor: pointer; display: flex;
-            align-items: center; justify-content: center;
-        }
-        .preview-name {
-            padding: 8px 12px; font-size: 11px;
-            color: var(--text-mid); background: var(--surface-2);
-            display: flex; align-items: center; gap: 6px;
-        }
-        .preview-name span { color: var(--gold); font-size: 14px; }
-
-        /* ── Price ── */
+        /* ── Price display ── */
         .price-wrap {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 13px 16px;
+            padding: 14px 18px;
             background: var(--surface-2); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); margin-bottom: 18px;
+            border-radius: var(--radius-md); margin-bottom: 18px;
             transition: border-color var(--transition);
         }
-        .price-wrap.has-price { border-color: rgba(204,176,73,.4); }
+        .price-wrap.has-price { border-color: rgba(204,176,73,.4); background: rgba(204,176,73,.04); }
         .price-label { font-size: 11px; color: var(--text-lo); letter-spacing: 1px; text-transform: uppercase; }
         #price-display {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 24px; font-weight: 600; color: var(--gold);
+            font-size: 26px; font-weight: 600; color: var(--gold);
         }
+
+        /* ── WhatsApp Notice ── */
+        .wa-notice {
+            display: flex; align-items: flex-start; gap: 12px;
+            background: #F0FDF4; border: 1px solid #86EFAC;
+            border-radius: var(--radius-md);
+            padding: 14px 16px; margin-bottom: 20px;
+        }
+        .wa-notice-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+        .wa-notice-text { font-size: 12px; color: #15803D; line-height: 1.6; }
+        .wa-notice-text strong { display: block; margin-bottom: 3px; font-size: 13px; }
 
         /* ── Submit ── */
         .btn-submit {
             width: 100%; padding: 15px;
-            background: var(--gold); color: #fff;
+            background: #25D366; color: #fff;
             border: none; border-radius: 50px;
-            font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
             cursor: pointer; font-family: 'DM Sans', sans-serif;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: all var(--transition);
         }
-        .btn-submit:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(204,176,73,.3); }
+        .btn-submit:hover { background: #1EB858; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,.3); }
+        .btn-submit svg { width: 18px; height: 18px; }
 
-        .footer-note { text-align: center; margin-top: 16px; font-size: 11px; color: var(--text-lo); }
+        .footer-note { text-align: center; margin-top: 14px; font-size: 11px; color: var(--text-lo); }
 
         @media (max-width: 480px) {
             .card { padding: 28px 18px 24px; }
@@ -333,12 +243,22 @@
     </style>
 </head>
 <body>
+
+    <div class="back-wrap">
+        <a href="{{ route('home') }}" class="back-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Kembali ke Beranda
+        </a>
+    </div>
+
 <div class="card">
 
     <div class="header">
         <div class="logo-mark">V</div>
         <div class="header-title">Reservation</div>
-        <div class="header-avatar">&#x1F464;</div>
+        <div class="header-user">
+            <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}</div>
+        </div>
     </div>
 
     <div class="tagline">
@@ -346,28 +266,34 @@
         <p class="tagline-sub">Virtual Imagination Studio</p>
     </div>
 
-    <div class="divider"><span>Fill in your details</span></div>
+    <div class="divider"><span>Isi data booking Anda</span></div>
 
-    <form action="{{ route('bookings.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+    <form action="{{ route('bookings.store') }}" method="POST" novalidate>
         @csrf
 
         {{-- Personal Info --}}
         <div class="panel">
-            <div class="panel-label">Personal Information</div>
+            <div class="panel-label">Informasi Pribadi</div>
             <div class="form-group">
-                <label for="full_name">Full Name</label>
-                <input type="text" id="full_name" name="full_name" value="{{ old('full_name') }}" placeholder="e.g. Budi Santoso" required>
+                <label for="full_name">Nama Lengkap</label>
+                <input type="text" id="full_name" name="full_name"
+                       value="{{ old('full_name', auth()->user()->name ?? '') }}"
+                       placeholder="cth. Budi Santoso" required>
                 @error('full_name')<div class="error-msg">{{ $message }}</div>@enderror
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="you@email.com" required>
+                    <input type="email" id="email" name="email"
+                           value="{{ old('email', auth()->user()->email ?? '') }}"
+                           placeholder="kamu@email.com" required>
                     @error('email')<div class="error-msg">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx" required>
+                    <label for="phone">No. HP / WhatsApp</label>
+                    <input type="tel" id="phone" name="phone"
+                           value="{{ old('phone') }}"
+                           placeholder="08xxxxxxxxxx" required>
                     @error('phone')<div class="error-msg">{{ $message }}</div>@enderror
                 </div>
             </div>
@@ -375,16 +301,17 @@
 
         {{-- Session Details --}}
         <div class="panel">
-            <div class="panel-label">Session Details</div>
+            <div class="panel-label">Detail Sesi</div>
             <div class="form-group">
-                <label for="package_id">Select Service</label>
+                <label for="package_id">Pilih Paket Studio</label>
                 <select id="package_id" name="package_id" required onchange="handlePackageChange()">
-                    <option value="">— Choose a Package —</option>
+                    <option value="">— Pilih Paket —</option>
                     @foreach($packages as $package)
                         <option value="{{ $package->id }}"
                             data-price="{{ $package->price }}"
-                            data-name="{{ $package->name }}"
-                            {{ old('package_id') == $package->id ? 'selected' : '' }}>
+                            data-name="{{ addslashes($package->name) }}"
+                            data-duration="{{ $package->duration_minutes }}"
+                            {{ old('package_id', request('package')) == $package->id ? 'selected' : '' }}>
                             {{ $package->name }} — {{ $package->getFormattedPrice() }}
                         </option>
                     @endforeach
@@ -393,182 +320,62 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="booking_date">Preferred Date</label>
-                    <input type="date" id="booking_date" name="booking_date" value="{{ old('booking_date') }}" min="{{ date('Y-m-d') }}" required>
+                    <label for="booking_date">Tanggal Sesi</label>
+                    <input type="date" id="booking_date" name="booking_date"
+                           value="{{ old('booking_date') }}"
+                           min="{{ date('Y-m-d') }}" required>
                     @error('booking_date')<div class="error-msg">{{ $message }}</div>@enderror
                 </div>
                 <div class="form-group">
-                    <label for="booking_time">Preferred Time</label>
-                    <input type="time" id="booking_time" name="booking_time" value="{{ old('booking_time') }}" required>
+                    <label for="booking_time">Jam Mulai</label>
+                    <input type="time" id="booking_time" name="booking_time"
+                           value="{{ old('booking_time') }}" required>
                     @error('booking_time')<div class="error-msg">{{ $message }}</div>@enderror
                 </div>
             </div>
             <div class="form-group">
-                <label for="special_request">Special Request</label>
-                <textarea id="special_request" name="special_request" placeholder="Any special requirements...">{{ old('special_request') }}</textarea>
+                <label for="special_request">Permintaan Khusus (opsional)</label>
+                <textarea id="special_request" name="special_request"
+                          placeholder="Ceritakan kebutuhan atau permintaan khusus sesi Anda…">{{ old('special_request') }}</textarea>
                 @error('special_request')<div class="error-msg">{{ $message }}</div>@enderror
             </div>
         </div>
 
-        {{-- Payment Method --}}
-        <div class="panel">
-            <div class="panel-label">Payment Method</div>
-
-            {{-- Tabs --}}
-            <div class="pm-tabs">
-                <label class="pm-tab active" id="tab-transfer" onclick="switchPM('transfer')">
-                    <input type="radio" name="payment_method" value="transfer" {{ old('payment_method', 'transfer') === 'transfer' ? 'checked' : '' }}>
-                    🏦 Transfer Bank
-                </label>
-                <label class="pm-tab" id="tab-qris" onclick="switchPM('qris')">
-                    <input type="radio" name="payment_method" value="qris" {{ old('payment_method') === 'qris' ? 'checked' : '' }}>
-                    📱 QRIS
-                </label>
-            </div>
-            @error('payment_method')<div class="error-msg" style="margin-bottom:12px">{{ $message }}</div>@enderror
-
-            {{-- Transfer Info --}}
-            <div class="transfer-info show" id="transfer-info">
-                <div class="bank-list">
-                    <div class="bank-item">
-                        <div class="bank-left">
-                            <div class="bank-logo bca">BCA</div>
-                            <div>
-                                <div class="bank-name">Bank BCA</div>
-                                <div class="bank-holder">Virtual Imagination Studio</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;align-items:center">
-                            <span class="bank-number" id="num-bca">1234567890</span>
-                            <button type="button" class="copy-btn" onclick="copyNumber('1234567890', this)">Salin</button>
-                        </div>
-                    </div>
-                    <div class="bank-item">
-                        <div class="bank-left">
-                            <div class="bank-logo bni">BNI</div>
-                            <div>
-                                <div class="bank-name">Bank BNI</div>
-                                <div class="bank-holder">Virtual Imagination Studio</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;align-items:center">
-                            <span class="bank-number">9876543210</span>
-                            <button type="button" class="copy-btn" onclick="copyNumber('9876543210', this)">Salin</button>
-                        </div>
-                    </div>
-                    <div class="bank-item">
-                        <div class="bank-left">
-                            <div class="bank-logo mdr">MDR</div>
-                            <div>
-                                <div class="bank-name">Bank Mandiri</div>
-                                <div class="bank-holder">Virtual Imagination Studio</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;align-items:center">
-                            <span class="bank-number">1122334455</span>
-                            <button type="button" class="copy-btn" onclick="copyNumber('1122334455', this)">Salin</button>
-                        </div>
-                    </div>
-                    <div class="bank-item">
-                        <div class="bank-left">
-                            <div class="bank-logo bri">BRI</div>
-                            <div>
-                                <div class="bank-name">Bank BRI</div>
-                                <div class="bank-holder">Virtual Imagination Studio</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;align-items:center">
-                            <span class="bank-number">5566778899</span>
-                            <button type="button" class="copy-btn" onclick="copyNumber('5566778899', this)">Salin</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- QRIS Info --}}
-            <div class="qris-info" id="qris-info">
-                <div class="qris-box">
-                    <div class="qris-code">
-                        {{-- Dummy QR SVG --}}
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="5" y="5" width="30" height="30" rx="3" fill="none" stroke="#1A1A1A" stroke-width="4"/>
-                            <rect x="12" y="12" width="16" height="16" rx="1" fill="#1A1A1A"/>
-                            <rect x="65" y="5" width="30" height="30" rx="3" fill="none" stroke="#1A1A1A" stroke-width="4"/>
-                            <rect x="72" y="12" width="16" height="16" rx="1" fill="#1A1A1A"/>
-                            <rect x="5" y="65" width="30" height="30" rx="3" fill="none" stroke="#1A1A1A" stroke-width="4"/>
-                            <rect x="12" y="72" width="16" height="16" rx="1" fill="#1A1A1A"/>
-                            <rect x="42" y="5" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="52" y="5" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="42" y="15" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="52" y="25" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="42" y="35" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="5" y="42" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="15" y="42" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="25" y="52" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="5" y="52" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="42" y="42" width="6" height="6" fill="#CCB049"/>
-                            <rect x="52" y="42" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="62" y="42" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="52" y="52" width="6" height="6" fill="#CCB049"/>
-                            <rect x="62" y="52" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="42" y="62" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="72" y="42" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="82" y="42" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="72" y="52" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="82" y="62" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="42" y="72" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="52" y="72" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="62" y="82" width="6" height="6" fill="#1A1A1A"/>
-                            <rect x="72" y="72" width="6" height="6" fill="#CCB049"/>
-                            <rect x="82" y="82" width="6" height="6" fill="#1A1A1A"/>
-                        </svg>
-                    </div>
-                    <div class="qris-label">Virtual Imagination Studio</div>
-                    <div class="qris-sub">Scan menggunakan aplikasi e-wallet atau m-banking apapun</div>
-                </div>
-            </div>
-
-            {{-- Upload Bukti Pembayaran --}}
-            <div class="upload-section">
-                <label style="margin-bottom:10px">Upload Bukti Pembayaran</label>
-                <div class="upload-box" id="upload-box">
-                    <input type="file" name="payment_proof" id="payment_proof" accept="image/*" onchange="handleFileSelect(this)">
-                    <span class="upload-icon">📎</span>
-                    <div class="upload-title">Klik atau drag foto bukti pembayaran</div>
-                    <div class="upload-sub">Format: JPG, PNG, WEBP • Maks. <span>5MB</span></div>
-                </div>
-                <div class="preview-wrap" id="preview-wrap">
-                    <img id="preview-img" src="" alt="Preview bukti pembayaran">
-                    <button type="button" class="preview-remove" onclick="removeFile()">✕</button>
-                    <div class="preview-name">
-                        <span>✓</span>
-                        <span id="preview-name-text"></span>
-                    </div>
-                </div>
-                @error('payment_proof')<div class="error-msg" style="margin-top:8px">{{ $message }}</div>@enderror
-            </div>
+        {{-- Price ── */}}
+        <div class="price-wrap" id="price-wrap">
+            <span class="price-label">Total Paket</span>
+            <span id="price-display">Rp —</span>
         </div>
 
-        {{-- Price --}}
-        <div class="price-wrap" id="price-wrap">
-            <span class="price-label">Total</span>
-            <span id="price-display">Rp —</span>
+        {{-- WhatsApp Notice --}}
+        <div class="wa-notice">
+            <div class="wa-notice-icon">💬</div>
+            <div class="wa-notice-text">
+                <strong>Konfirmasi via WhatsApp</strong>
+                Setelah booking tersimpan, Anda akan diarahkan ke WhatsApp untuk menghubungi admin secara langsung. Admin akan mengkonfirmasi ketersediaan jadwal.
+            </div>
         </div>
 
         <input type="hidden" id="price"   name="price"   value="{{ old('price', 0) }}">
         <input type="hidden" id="service" name="service" value="{{ old('service', '') }}">
 
-        <button type="submit" class="btn-submit">Confirm Reservation</button>
+        <button type="submit" class="btn-submit">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            Booking & Hubungi via WhatsApp
+        </button>
     </form>
 
-    <p class="footer-note">Harga sudah termasuk semua layanan dalam paket</p>
+    <p class="footer-note">Harga sudah termasuk semua layanan dalam paket yang dipilih</p>
 </div>
 
 <script>
-    // Package price map
     const packageData = {
         @foreach($packages as $package)
-        "{{ $package->id }}": { price: {{ (int)$package->price }}, name: "{{ addslashes($package->name) }}" },
+        "{{ $package->id }}": {
+            price: {{ (int)$package->price }},
+            name: "{{ addslashes($package->name) }}",
+            duration: {{ $package->duration_minutes }}
+        },
         @endforeach
     };
 
@@ -577,105 +384,31 @@
     }
 
     function handlePackageChange() {
-        const sel = document.getElementById('package_id');
-        const id  = sel.value;
-        const priceDisp  = document.getElementById('price-display');
-        const priceInput = document.getElementById('price');
-        const svcInput   = document.getElementById('service');
-        const wrap       = document.getElementById('price-wrap');
+        const sel       = document.getElementById('package_id');
+        const id        = sel.value;
+        const priceDisp = document.getElementById('price-display');
+        const priceInp  = document.getElementById('price');
+        const svcInp    = document.getElementById('service');
+        const wrap      = document.getElementById('price-wrap');
 
         if (id && packageData[id]) {
             const { price, name } = packageData[id];
             priceDisp.textContent = formatRupiah(price);
-            priceInput.value      = price;
-            svcInput.value        = name;
+            priceInp.value        = price;
+            svcInp.value          = name;
             wrap.classList.add('has-price');
         } else {
             priceDisp.textContent = 'Rp —';
-            priceInput.value      = 0;
-            svcInput.value        = '';
+            priceInp.value        = 0;
+            svcInp.value          = '';
             wrap.classList.remove('has-price');
         }
     }
 
-    // Payment method switch
-    function switchPM(method) {
-        const transferInfo = document.getElementById('transfer-info');
-        const qrisInfo     = document.getElementById('qris-info');
-        const tabTransfer  = document.getElementById('tab-transfer');
-        const tabQris      = document.getElementById('tab-qris');
-
-        if (method === 'transfer') {
-            transferInfo.classList.add('show');
-            qrisInfo.classList.remove('show');
-            tabTransfer.classList.add('active');
-            tabQris.classList.remove('active');
-            tabTransfer.querySelector('input').checked = true;
-        } else {
-            qrisInfo.classList.add('show');
-            transferInfo.classList.remove('show');
-            tabQris.classList.add('active');
-            tabTransfer.classList.remove('active');
-            tabQris.querySelector('input').checked = true;
-        }
-    }
-
-    // Copy rekening
-    function copyNumber(number, btn) {
-        navigator.clipboard.writeText(number).then(() => {
-            btn.textContent = '✓ Disalin';
-            btn.classList.add('copied');
-            setTimeout(() => {
-                btn.textContent = 'Salin';
-                btn.classList.remove('copied');
-            }, 2000);
-        });
-    }
-
-    // File upload preview
-    function handleFileSelect(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            document.getElementById('preview-img').src = e.target.result;
-            document.getElementById('preview-name-text').textContent = file.name;
-            document.getElementById('preview-wrap').style.display = 'block';
-            document.getElementById('upload-box').style.opacity = '.5';
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function removeFile() {
-        document.getElementById('payment_proof').value = '';
-        document.getElementById('preview-wrap').style.display = 'none';
-        document.getElementById('upload-box').style.opacity = '1';
-    }
-
-    // Drag & drop
-    const uploadBox = document.getElementById('upload-box');
-    uploadBox.addEventListener('dragover', (e) => { e.preventDefault(); uploadBox.classList.add('dragging'); });
-    uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragging'));
-    uploadBox.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadBox.classList.remove('dragging');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const input = document.getElementById('payment_proof');
-            const dt = new DataTransfer();
-            dt.items.add(file);
-            input.files = dt.files;
-            handleFileSelect(input);
-        }
-    });
-
-    // Init on page load
+    // Auto-select package from URL query ?package=id
     window.addEventListener('DOMContentLoaded', () => {
         const sel = document.getElementById('package_id');
         if (sel.value) handlePackageChange();
-
-        const oldPM = "{{ old('payment_method', 'transfer') }}";
-        switchPM(oldPM);
     });
 </script>
 </body>

@@ -26,7 +26,7 @@ class BookingController extends Controller
     }
 
     /**
-     * Form buat booking baru.
+     * Form buat booking baru — jika tamu, redirect ke login.
      */
     public function create(): View
     {
@@ -35,17 +35,14 @@ class BookingController extends Controller
     }
 
     /**
-     * Simpan booking baru milik user yang sedang login.
+     * Simpan booking baru, lalu redirect ke WhatsApp untuk konfirmasi.
      */
     public function store(StoreBookingRequest $request): RedirectResponse
     {
         $package = Package::findOrFail($request->package_id);
 
-        $proofPath = $request->file('payment_proof')
-            ->store('payment_proofs', 'public');
-
         $booking = Booking::create([
-            'user_id'         => Auth::id(),                 // ← tie ke user login
+            'user_id'         => Auth::id(),
             'package_id'      => $package->id,
             'full_name'       => $request->full_name,
             'email'           => $request->email,
@@ -54,13 +51,43 @@ class BookingController extends Controller
             'booking_date'    => $request->booking_date,
             'booking_time'    => $request->booking_time,
             'special_request' => $request->special_request,
-            'payment_method'  => $request->payment_method,
+            'payment_method'  => 'whatsapp',
             'price'           => $package->price,
-            'payment_proof'   => $proofPath,
             'status'          => 'pending',
         ]);
 
-        return redirect()->route('bookings.show', $booking->id);
+        // Redirect ke method whatsapp agar WhatsApp terbuka, lalu user diarahkan ke history
+        return redirect()->route('bookings.whatsapp', $booking->id);
+    }
+
+    /**
+     * Redirect ke WhatsApp API dengan pesan otomatis, lalu tampilkan halaman konfirmasi.
+     */
+    public function whatsapp(Booking $booking): mixed
+    {
+        // Pastikan booking ini milik user yang sedang login
+        abort_if($booking->user_id !== Auth::id(), 403);
+
+        $booking->load('package');
+
+        $nama   = $booking->full_name;
+        $tgl    = \Carbon\Carbon::parse($booking->booking_date)->format('d M Y');
+        $waktu  = \Carbon\Carbon::createFromTimeString($booking->booking_time)->format('H:i');
+        $paket  = $booking->package->name ?? $booking->service;
+        $ref    = $booking->booking_reference;
+
+        $pesan = "Halo Virtual Imagination, Saya sudah melakukan booking via website.\n"
+               . "Nama: {$nama}\n"
+               . "Tanggal: {$tgl} pukul {$waktu}\n"
+               . "Paket: {$paket}\n"
+               . "No. Referensi: {$ref}\n"
+               . "Mohon konfirmasi ketersediaannya. Terima kasih!";
+
+        $waNumber = '6281514191380'; // ganti dengan nomor WA studio
+        $waUrl    = 'https://wa.me/' . $waNumber . '?text=' . rawurlencode($pesan);
+
+        // Tampilkan halaman konfirmasi dengan link WhatsApp
+        return view('bookings.confirmation', compact('booking', 'waUrl'));
     }
 
     /**
@@ -68,9 +95,7 @@ class BookingController extends Controller
      */
     public function show(Booking $booking): View
     {
-        // Pastikan booking ini milik user yang sedang login
         abort_if($booking->user_id !== Auth::id(), 403, 'Anda tidak memiliki akses ke booking ini.');
-
         $booking->load('package');
         return view('bookings.confirmation', compact('booking'));
     }

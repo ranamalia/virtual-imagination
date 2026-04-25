@@ -22,11 +22,11 @@ class Booking extends Model
         'booking_date',
         'booking_time',
         'special_request',
-        'payment_method',
+        'payment_method',   // nullable — default 'whatsapp'
         'booking_reference',
         'status',
         'price',
-        'payment_proof',
+        'payment_proof',    // nullable — kept for legacy data
     ];
 
     protected $casts = [

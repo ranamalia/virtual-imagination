@@ -190,7 +190,7 @@
     <div class="status-form-card">
         <h3>Ubah Status Booking</h3>
         <div class="status-buttons">
-            @foreach(['pending','confirmed','scheduled','rejected'] as $s)
+            @foreach(['pending','confirmed','rejected'] as $s)
                 <form method="POST" action="{{ route('admin.bookings.updateStatus', $booking) }}" style="display:inline">
                     @csrf
                     @method('PATCH')

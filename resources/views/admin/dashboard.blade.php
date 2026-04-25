@@ -109,7 +109,42 @@
         .badge-pending   { background: var(--warning-bg); color: var(--warning); }
         .badge-confirmed { background: var(--success-bg); color: var(--success); }
         .badge-rejected  { background: var(--danger-bg);  color: var(--danger);  }
-        .badge-scheduled { background: var(--info-bg);    color: var(--info);    }
+
+        /* ── Pending Alert ───────────────────────────────── */
+        .pending-alert {
+            background: #FEF3C7;
+            border: 1px solid #F5D76E;
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+        .pending-alert-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .pending-alert-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px; font-weight: 600; color: #92400E;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .pending-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 14px; background: rgba(255,255,255,.7);
+            border-radius: 8px; margin-bottom: 8px;
+            text-decoration: none; color: inherit;
+            transition: background var(--transition);
+        }
+        .pending-item:hover { background: #fff; }
+        .pending-item:last-child { margin-bottom: 0; }
+        .pending-name { font-weight: 600; font-size: 14px; color: #92400E; }
+        .pending-sub  { font-size: 12px; color: #B45309; margin-top: 2px; }
+        .btn-action-sm {
+            padding: 5px 14px; background: var(--ink); color: #fff;
+            border-radius: 6px; font-size: 12px; font-weight: 600;
+            text-decoration: none; white-space: nowrap; flex-shrink: 0;
+            transition: background var(--transition);
+        }
+        .btn-action-sm:hover { background: var(--gold-dark); }
 
         .empty-state { text-align: center; padding: 48px 24px; color: var(--text-lo); }
     </style>
@@ -136,30 +171,67 @@
             </div>
         </div>
 
-        <div class="stat-card">
+        <a href="{{ route('admin.bookings.index', ['status'=>'pending']) }}" class="stat-card" style="text-decoration:none">
             <div class="stat-icon orange">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
             </div>
             <div>
-                <div class="stat-value">{{ $pendingBookings }}</div>
-                <div class="stat-label">Booking Pending</div>
+                <div class="stat-value" style="color:var(--warning)">{{ $pendingBookings }}</div>
+                <div class="stat-label">Perlu Konfirmasi</div>
             </div>
-        </div>
+        </a>
+
+        <a href="{{ route('admin.bookings.index', ['status'=>'confirmed']) }}" class="stat-card" style="text-decoration:none">
+            <div class="stat-icon green">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" style="color:var(--success)">{{ $confirmedBookings }}</div>
+                <div class="stat-label">Dikonfirmasi</div>
+            </div>
+        </a>
 
         <div class="stat-card">
-            <div class="stat-icon green">
+            <div class="stat-icon" style="background:rgba(192,57,43,.1);color:var(--danger)">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                 </svg>
             </div>
             <div>
                 <div class="stat-value">{{ $totalUsers }}</div>
-                <div class="stat-label">Total User Terdaftar</div>
+                <div class="stat-label">User Terdaftar</div>
             </div>
         </div>
     </div>
+
+    {{-- ── Pending yang perlu tindakan ── --}}
+    @if($pendingList->isNotEmpty())
+    <div class="pending-alert">
+        <div class="pending-alert-header">
+            <div class="pending-alert-title">
+                ⚡ {{ $pendingBookings }} Booking Menunggu Konfirmasi
+            </div>
+            <a href="{{ route('admin.bookings.index', ['status'=>'pending']) }}" class="section-link">Lihat semua →</a>
+        </div>
+        @foreach($pendingList as $pb)
+            <a href="{{ route('admin.bookings.show', $pb) }}" class="pending-item">
+                <div>
+                    <div class="pending-name">{{ $pb->full_name }}</div>
+                    <div class="pending-sub">
+                        {{ $pb->package->name ?? $pb->service }}
+                        · {{ \Carbon\Carbon::parse($pb->booking_date)->format('d M Y') }}
+                        · {{ \Carbon\Carbon::createFromTimeString($pb->booking_time)->format('H:i') }}
+                    </div>
+                </div>
+                <span class="btn-action-sm">Tinjau →</span>
+            </a>
+        @endforeach
+    </div>
+    @endif
 
     <!-- Recent Bookings -->
     <div class="section-header">
@@ -186,7 +258,7 @@
                 </thead>
                 <tbody>
                     @foreach($recentBookings as $i => $booking)
-                        <tr>
+                        <tr style="cursor:pointer" onclick="window.location='{{ route('admin.bookings.show', $booking) }}'">
                             <td style="color:var(--text-lo)">{{ $i + 1 }}</td>
                             <td>
                                 <div style="font-weight:600">{{ $booking->full_name }}</div>
@@ -196,7 +268,7 @@
                             <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
                             <td>
                                 <span class="badge badge-{{ strtolower($booking->status) }}">
-                                    {{ $booking->status }}
+                                    {{ ucfirst($booking->status) }}
                                 </span>
                             </td>
                             <td style="font-weight:600;color:var(--gold-dark)">

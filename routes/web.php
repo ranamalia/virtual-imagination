@@ -3,32 +3,38 @@
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPackageController;
+use App\Http\Controllers\Admin\AdminPortfolioController;
+use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
-// ── Public ────────────────────────────────────────────────────────────────────
-Route::get('/', function () {
-    return view('welcome');
-});
+// ── Public Landing ─────────────────────────────────────────────────────────────
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// ── User Dashboard ─────────────────────────────────────────────────────────────
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Named aliases for landing-page sections (same controller, client-side scroll via anchor)
+Route::get('/studiorent', [HomeController::class, 'index'])->name('studiorent');
+Route::get('/portfolio',  [HomeController::class, 'index'])->name('portfolio');
+Route::get('/contact',    [HomeController::class, 'index'])->name('contact');
 
-// ── Booking Routes (PROTECTED: auth + role:user) ──────────────────────────────
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/bookings/create',    [BookingController::class, 'create'])->name('bookings.create');
-    Route::post('/bookings',          [BookingController::class, 'store'])->name('bookings.store');
-    Route::get('/bookings/{booking}', [BookingController::class, 'show'])->name('bookings.show');
-});
+// ── Permanent redirects: old /dashboard routes → / ───────────────────────────
+Route::redirect('/dashboard',           '/', 301);
+Route::redirect('/dashboard/studiorent','/', 301);
 
-// Riwayat Booking — cukup auth (bukan role:user agar fleksibel)
+// ── Booking Routes (PROTECTED: auth required) ─────────────────────────────────
 Route::middleware(['auth'])->group(function () {
-    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    // Riwayat booking milik user
+    Route::get('/bookings',            [BookingController::class, 'index'])->name('bookings.index');
+    // Form buat booking baru
+    Route::get('/bookings/create',     [BookingController::class, 'create'])->name('bookings.create');
+    Route::post('/bookings',           [BookingController::class, 'store'])->name('bookings.store');
+    // Detail / konfirmasi setelah booking
+    Route::get('/bookings/{booking}',  [BookingController::class, 'show'])->name('bookings.show');
+    // Redirect ke WhatsApp setelah booking berhasil
+    Route::get('/bookings/{booking}/whatsapp', [BookingController::class, 'whatsapp'])->name('bookings.whatsapp');
 });
 
 // ── Profile (harus login) ─────────────────────────────────────────────────────
@@ -36,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Testimoni
+    Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
 });
 
 // ── Admin Routes (PROTECTED: auth + role:admin) ────────────────────────────────
@@ -66,6 +75,19 @@ Route::prefix('admin')
         Route::get('/packages/{package}/edit',  [AdminPackageController::class, 'edit'])->name('packages.edit');
         Route::patch('/packages/{package}',     [AdminPackageController::class, 'update'])->name('packages.update');
         Route::delete('/packages/{package}',    [AdminPackageController::class, 'destroy'])->name('packages.destroy');
+
+        // Manajemen Portfolio
+        Route::get('/portfolios',                   [AdminPortfolioController::class, 'index'])->name('portfolios.index');
+        Route::get('/portfolios/create',            [AdminPortfolioController::class, 'create'])->name('portfolios.create');
+        Route::post('/portfolios',                  [AdminPortfolioController::class, 'store'])->name('portfolios.store');
+        Route::get('/portfolios/{portfolio}/edit',  [AdminPortfolioController::class, 'edit'])->name('portfolios.edit');
+        Route::patch('/portfolios/{portfolio}',     [AdminPortfolioController::class, 'update'])->name('portfolios.update');
+        Route::delete('/portfolios/{portfolio}',    [AdminPortfolioController::class, 'destroy'])->name('portfolios.destroy');
+
+        // Manajemen Testimoni
+        Route::get('/testimonials',                            [AdminTestimonialController::class, 'index'])->name('testimonials.index');
+        Route::patch('/testimonials/{testimonial}/toggle',     [AdminTestimonialController::class, 'toggleActive'])->name('testimonials.toggle');
+        Route::delete('/testimonials/{testimonial}',           [AdminTestimonialController::class, 'destroy'])->name('testimonials.destroy');
     });
 
 // ── Auth ──────────────────────────────────────────────────────────────────────

@@ -10,8 +10,8 @@ use Illuminate\View\View;
 
 class AdminBookingController extends Controller
 {
-    /** Status yang diperbolehkan */
-    private const ALLOWED_STATUSES = ['pending', 'confirmed', 'rejected', 'scheduled'];
+    /** Status yang diperbolehkan (enum: pending | confirmed | rejected) */
+    private const ALLOWED_STATUSES = ['pending', 'confirmed', 'rejected'];
 
     /**
      * Daftar semua booking dengan pagination + filter status.
@@ -57,6 +57,21 @@ class AdminBookingController extends Controller
         $request->validate([
             'status' => ['required', 'in:' . implode(',', self::ALLOWED_STATUSES)],
         ]);
+
+        // ── Anti double-booking: cek konflik jika status diubah ke 'confirmed' ──
+        if ($request->status === 'confirmed') {
+            $conflict = Booking::where('id', '!=', $booking->id)
+                ->where('status', 'confirmed')
+                ->where('booking_date', $booking->booking_date)
+                ->where('booking_time', $booking->booking_time)
+                ->exists();
+
+            if ($conflict) {
+                return back()->withErrors(['status' =>
+                    'Tidak dapat dikonfirmasi: sudah ada booking lain yang dikonfirmasi pada tanggal dan jam yang sama.'
+                ]);
+            }
+        }
 
         $booking->update(['status' => $request->status]);
 

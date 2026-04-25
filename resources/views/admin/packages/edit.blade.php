@@ -10,7 +10,7 @@
         .back-link:hover { color:var(--gold-dark); }
         .form-card {
             background:var(--surface); border:1px solid var(--border);
-            border-radius:var(--radius-md); padding:32px; max-width:640px;
+            border-radius:var(--radius-md); padding:32px; max-width:680px;
         }
         .form-title {
             font-family:'Cormorant Garamond',serif; font-size:22px;
@@ -53,14 +53,20 @@
             padding:11px 28px; background:var(--gold); color:var(--ink);
             border:none; border-radius:var(--radius-sm); font-size:14px;
             font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif;
+            transition: background var(--transition);
         }
         .btn-save:hover { background:var(--gold-dark); color:#fff; }
         .btn-cancel {
             padding:11px 20px; background:transparent; border:1px solid var(--border);
             border-radius:var(--radius-sm); font-size:14px; font-weight:500;
-            color:var(--text-mid); text-decoration:none;
+            color:var(--text-mid); text-decoration:none; transition: all var(--transition);
         }
         .btn-cancel:hover { border-color:var(--gold); color:var(--gold-dark); }
+        .section-divider { border:none; border-top:1px solid var(--border); margin:28px 0 24px; }
+        .section-label {
+            font-size:11px; font-weight:700; letter-spacing:1px;
+            text-transform:uppercase; color:var(--gold-dark); margin-bottom:16px;
+        }
     </style>
 
     <a href="{{ route('admin.packages.index') }}" class="back-link">← Kembali ke Paket Foto</a>
@@ -72,7 +78,7 @@
             @csrf
             @method('PATCH')
 
-            <!-- Nama -->
+            <!-- Nama Paket -->
             <div class="form-group">
                 <label class="form-label" for="name">Nama Paket <span>*</span></label>
                 <input type="text" id="name" name="name" class="form-input"
@@ -80,15 +86,50 @@
                 @error('name')<div class="form-error">{{ $message }}</div>@enderror
             </div>
 
-            <!-- Deskripsi -->
+            <!-- Kategori -->
             <div class="form-group">
-                <label class="form-label" for="description">Deskripsi</label>
-                <textarea id="description" name="description"
-                          class="form-input">{{ old('description', $package->description) }}</textarea>
+                <label class="form-label" for="category">Kategori</label>
+                <input type="text" id="category" name="category" class="form-input"
+                       value="{{ old('category', $package->category) }}"
+                       placeholder="cth: Photography, Videography, Wedding">
+                <div class="form-hint">Kategori paket untuk filter tampilan.</div>
+                @error('category')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <!-- Deskripsi -->
+            @php
+                // Convert JSON array back to newline-separated text for textarea
+                $descValue = old('description');
+                if ($descValue === null) {
+                    $descArray = $package->description;
+                    $descValue = is_array($descArray) ? implode("\n", $descArray) : ($descArray ?? '');
+                }
+                $bonusValue = old('bonus');
+                if ($bonusValue === null) {
+                    $bonusArray = $package->bonus;
+                    $bonusValue = is_array($bonusArray) ? implode("\n", $bonusArray) : ($bonusArray ?? '');
+                }
+            @endphp
+
+            <div class="form-group">
+                <label class="form-label" for="description">Deskripsi / Benefit Paket</label>
+                <textarea id="description" name="description" class="form-input" rows="5">{{ $descValue }}</textarea>
+                <div class="form-hint">💡 Tulis <strong>satu poin per baris</strong>. Setiap baris akan ditampilkan sebagai bullet point.</div>
                 @error('description')<div class="form-error">{{ $message }}</div>@enderror
             </div>
 
-            <!-- Harga & Durasi -->
+            <!-- Bonus -->
+            <div class="form-group">
+                <label class="form-label" for="bonus">Bonus Paket</label>
+                <textarea id="bonus" name="bonus" class="form-input" rows="3">{{ $bonusValue }}</textarea>
+                <div class="form-hint">💡 Bonus tambahan di luar benefit utama. Tulis satu item per baris.</div>
+                @error('bonus')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <hr class="section-divider">
+            <div class="section-label">Detail Sesi</div>
+
+            <!-- Harga, Durasi -->
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="price">Harga (Rp) <span>*</span></label>
@@ -103,6 +144,18 @@
                     @error('duration_minutes')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
+
+            <!-- Max Person -->
+            <div class="form-group">
+                <label class="form-label" for="max_person">Maks. Peserta</label>
+                <input type="number" id="max_person" name="max_person" class="form-input"
+                       value="{{ old('max_person', $package->max_person) }}" min="1" placeholder="cth: 5">
+                <div class="form-hint">Jumlah orang maksimal yang bisa ikut dalam satu sesi.</div>
+                @error('max_person')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <hr class="section-divider">
+            <div class="section-label">Media & Status</div>
 
             <!-- Thumbnail -->
             <div class="form-group">
@@ -122,7 +175,7 @@
                 <div class="toggle-wrap">
                     <input type="checkbox" id="is_active" name="is_active" class="toggle"
                            value="1" {{ old('is_active', $package->is_active) ? 'checked' : '' }}>
-                    <label for="is_active" class="toggle-label">Paket Aktif (tampil di form booking)</label>
+                    <label for="is_active" class="toggle-label">Paket Aktif (tampil di halaman Studio Rent)</label>
                 </div>
             </div>
 
