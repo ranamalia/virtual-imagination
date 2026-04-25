@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPackageController;
 use App\Http\Controllers\Admin\AdminPortfolioController;
+use App\Http\Controllers\Admin\AdminTestimonialController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public Landing ─────────────────────────────────────────────────────────────
@@ -40,6 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile',    [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile',  [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Testimoni
+    Route::post('/testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
 });
 
 // ── Admin Routes (PROTECTED: auth + role:admin) ────────────────────────────────
@@ -78,6 +83,11 @@ Route::prefix('admin')
         Route::get('/portfolios/{portfolio}/edit',  [AdminPortfolioController::class, 'edit'])->name('portfolios.edit');
         Route::patch('/portfolios/{portfolio}',     [AdminPortfolioController::class, 'update'])->name('portfolios.update');
         Route::delete('/portfolios/{portfolio}',    [AdminPortfolioController::class, 'destroy'])->name('portfolios.destroy');
+
+        // Manajemen Testimoni
+        Route::get('/testimonials',                            [AdminTestimonialController::class, 'index'])->name('testimonials.index');
+        Route::patch('/testimonials/{testimonial}/toggle',     [AdminTestimonialController::class, 'toggleActive'])->name('testimonials.toggle');
+        Route::delete('/testimonials/{testimonial}',           [AdminTestimonialController::class, 'destroy'])->name('testimonials.destroy');
     });
 
 // ── Auth ──────────────────────────────────────────────────────────────────────

@@ -153,15 +153,196 @@
         .svc-desc{font-size:14px;color:var(--text-mid);line-height:1.7}
 
         /* ── TESTIMONIALS ── */
-        .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-        .testi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;transition:box-shadow var(--transition)}
-        .testi-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.07)}
-        .testi-stars{color:var(--gold);font-size:14px;letter-spacing:2px;margin-bottom:14px}
-        .testi-text{font-size:14px;color:var(--text-mid);line-height:1.75;margin-bottom:20px;font-style:italic}
-        .testi-author{display:flex;align-items:center;gap:12px}
-        .testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-        .testi-name{font-size:14px;font-weight:600;color:var(--ink)}
-        .testi-meta{font-size:12px;color:var(--text-lo)}
+        .testi-section-subtitle{font-size:15px;color:var(--text-mid);margin-top:8px}
+        .testi-count-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-pale);border:1px solid rgba(204,176,73,.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:var(--gold-dark);margin-top:12px}
+        .testi-count-badge svg{width:13px;height:13px}
+
+        .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+
+        /* Card */
+        .testi-card{
+            background:var(--surface);border:1px solid var(--border);
+            border-radius:16px;padding:28px 26px;
+            display:flex;flex-direction:column;
+            position:relative;overflow:hidden;
+            transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s ease;
+            cursor:default;
+        }
+        .testi-card::before{
+            content:'';position:absolute;top:0;left:0;right:0;height:3px;
+            background:linear-gradient(90deg,var(--gold),var(--gold-light));
+            transform:scaleX(0);transform-origin:left;
+            transition:transform .3s ease;
+        }
+        .testi-card:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,0.10)}
+        .testi-card:hover::before{transform:scaleX(1)}
+
+        /* Quote mark decoration */
+        .testi-quote-icon{
+            font-family:'Cormorant Garamond',serif;font-size:72px;line-height:.8;
+            color:var(--gold);opacity:.15;position:absolute;top:16px;right:20px;
+            font-weight:600;pointer-events:none;user-select:none;
+        }
+
+        /* Stars in card */
+        .testi-stars{display:flex;gap:3px;margin-bottom:14px;line-height:1}
+        .testi-stars .s-on{color:var(--gold);font-size:16px}
+        .testi-stars .s-off{color:#D1CFC8;font-size:16px}
+
+        /* Comment */
+        .testi-text{
+            font-size:14px;color:var(--text-mid);line-height:1.8;
+            margin-bottom:20px;font-style:italic;flex:1;
+            display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;
+        }
+
+        /* Author */
+        .testi-author{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+        .testi-avatar{
+            width:40px;height:40px;border-radius:50%;flex-shrink:0;
+            background:linear-gradient(135deg,var(--gold-dark),var(--gold-light));
+            color:#fff;font-size:15px;font-weight:700;
+            display:flex;align-items:center;justify-content:center;
+            box-shadow:0 2px 8px var(--gold-shadow);
+        }
+        .testi-name{font-size:14px;font-weight:600;color:var(--ink);line-height:1.3}
+        .testi-meta{font-size:11px;color:var(--text-lo);margin-top:2px;letter-spacing:.3px}
+
+        /* Empty state */
+        .testi-empty-wrap{text-align:center;padding:64px 24px;grid-column:1/-1}
+        .testi-empty-icon{
+            width:64px;height:64px;background:var(--gold-pale);border-radius:50%;
+            display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+        }
+        .testi-empty-icon svg{opacity:.5;color:var(--gold-dark)}
+        .testi-empty-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:8px}
+        .testi-empty-sub{font-size:14px;color:var(--text-lo);margin-bottom:20px}
+        .btn-be-first{display:inline-flex;align-items:center;gap:6px;padding:10px 22px;background:var(--ink);color:#fff;border-radius:var(--radius-sm);font-size:13px;font-weight:600;text-decoration:none;transition:background var(--transition)}
+        .btn-be-first:hover{background:var(--gold-dark)}
+
+        /* Alert */
+        .alert-testi-success{
+            display:flex;align-items:center;gap:10px;
+            background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);
+            border-radius:var(--radius-sm);padding:14px 18px;font-size:14px;
+            color:#059669;margin-bottom:28px;
+        }
+        .alert-testi-success svg{flex-shrink:0;width:18px;height:18px}
+
+        /* ── TESTI FORM ── */
+        .testi-form-wrap{
+            margin-top:56px;
+            background:var(--surface);border:1px solid var(--border);
+            border-radius:16px;padding:36px;
+            max-width:620px;margin-left:auto;margin-right:auto;
+            box-shadow:0 4px 24px rgba(0,0,0,0.04);
+        }
+        .testi-form-header{margin-bottom:24px}
+        .testi-form-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:4px}
+        .testi-form-sub{font-size:13px;color:var(--text-lo)}
+
+        /* Star picker */
+        .star-picker-wrap{margin-bottom:6px}
+        .star-picker{
+            display:inline-flex;flex-direction:row;gap:6px;
+            background:var(--surface-2);border:1.5px solid var(--border);
+            border-radius:var(--radius-sm);padding:10px 14px;
+            transition:border-color .2s;
+        }
+        .star-picker:focus-within{border-color:var(--gold)}
+        .star-picker label{
+            font-size:30px;cursor:pointer;color:#D1CFC8;
+            transition:color .15s,transform .18s cubic-bezier(.34,1.4,.64,1);
+            line-height:1;user-select:none;
+        }
+        .star-picker label.hovered,.star-picker label.selected{
+            color:var(--gold);transform:scale(1.2);
+        }
+        .star-hint{font-size:11px;color:var(--text-lo);margin-top:5px;letter-spacing:.3px}
+        .star-label-text{font-size:13px;font-weight:600;color:var(--gold-dark);margin-left:4px;transition:opacity .2s}
+        .star-label-text.hidden{opacity:0}
+
+        .testi-form-row{margin-bottom:18px}
+        .testi-form-row > label{
+            display:block;font-size:11px;font-weight:700;color:var(--text-mid);
+            text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;
+        }
+        .testi-form-row textarea{
+            width:100%;padding:12px 14px;border:1.5px solid var(--border);
+            border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;
+            font-size:14px;color:var(--ink);background:var(--surface-2);outline:none;
+            resize:vertical;min-height:100px;transition:border-color var(--transition);
+            line-height:1.7;
+        }
+        .testi-form-row textarea:focus{border-color:var(--gold);background:var(--surface)}
+        .char-count{font-size:11px;color:var(--text-lo);text-align:right;margin-top:4px}
+        .field-error{font-size:12px;color:#DC2626;margin-top:5px;display:flex;align-items:center;gap:4px}
+
+        .testi-form-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px;flex-wrap:wrap;gap:12px}
+        .btn-submit-testi{
+            display:inline-flex;align-items:center;gap:8px;
+            padding:12px 28px;background:var(--ink);color:#fff;
+            border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;
+            cursor:pointer;font-family:'DM Sans',sans-serif;
+            transition:background var(--transition),transform var(--transition);
+        }
+        .btn-submit-testi:hover{background:var(--gold-dark);transform:translateY(-1px)}
+        .btn-submit-testi svg{width:16px;height:16px;transition:transform .2s}
+        .btn-submit-testi:hover svg{transform:translateX(3px)}
+        .testi-form-note{font-size:12px;color:var(--text-lo)}
+
+        .testi-login-note{text-align:center;padding:32px 24px;color:var(--text-lo);font-size:14px}
+        .testi-login-note a{color:var(--gold-dark);font-weight:600;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+
+        /* Responsive */
+        @media(max-width:900px){.testi-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:600px){
+            .testi-grid{grid-template-columns:1fr}
+            .testi-form-wrap{padding:24px}
+        }
+
+        /* ── PKG CARD BUTTONS ── */
+        .pkg-btn-group{display:flex;gap:8px;align-items:center}
+        .btn-detail{font-size:13px;font-weight:600;color:var(--ink);background:transparent;border:1.5px solid var(--border);padding:8px 16px;border-radius:var(--radius-sm);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all var(--transition);white-space:nowrap}
+        .btn-detail:hover{border-color:var(--gold);color:var(--gold-dark);background:var(--gold-pale)}
+
+        /* ── PKG DESC LIST ── */
+        .pkg-desc-list{list-style:none;padding:0;margin:0 0 20px;flex:1}
+        .pkg-desc-list li{font-size:13px;color:var(--text-mid);padding:3px 0 3px 18px;position:relative;line-height:1.5}
+        .pkg-desc-list li::before{content:'✓';position:absolute;left:0;color:var(--gold-dark);font-weight:700;font-size:12px}
+
+        /* ── MODAL ── */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .28s ease,visibility .28s ease}
+        .modal-overlay.open{opacity:1;visibility:visible}
+        .modal-box{background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;transform:scale(.93) translateY(16px);transition:transform .28s cubic-bezier(.34,1.56,.64,1);box-shadow:0 32px 80px rgba(0,0,0,.2)}
+        .modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
+        .modal-header{display:flex;align-items:flex-start;justify-content:space-between;padding:28px 28px 0}
+        .modal-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--ink);line-height:1.2}
+        .modal-close{background:none;border:none;cursor:pointer;color:var(--text-lo);padding:4px;border-radius:var(--radius-sm);transition:color var(--transition);flex-shrink:0}
+        .modal-close:hover{color:var(--ink)}
+        .modal-body{padding:20px 28px 28px}
+        .modal-price{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--gold-dark);margin-bottom:4px}
+        .modal-price small{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-lo);display:block;margin-bottom:4px}
+        .modal-meta{display:flex;gap:16px;flex-wrap:wrap;margin:14px 0 20px}
+        .modal-meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-mid);background:var(--surface-2);padding:6px 12px;border-radius:20px;border:1px solid var(--border)}
+        .modal-meta-item svg{width:14px;height:14px;color:var(--gold-dark);flex-shrink:0}
+        .modal-section-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dark);margin-bottom:10px;margin-top:20px}
+        .modal-list{list-style:none;padding:0;margin:0}
+        .modal-list li{font-size:14px;color:var(--text-mid);padding:5px 0 5px 22px;position:relative;line-height:1.55;border-bottom:1px solid var(--border)}
+        .modal-list li:last-child{border-bottom:none}
+        .modal-list li::before{content:'✓';position:absolute;left:0;color:var(--gold-dark);font-weight:700}
+        .modal-bonus-list li::before{content:'🎁';font-size:12px}
+        .modal-footer{padding:0 28px 24px;display:flex;gap:10px}
+        .btn-modal-book{flex:1;padding:13px;background:var(--ink);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;text-align:center;display:inline-flex;align-items:center;justify-content:center;transition:background var(--transition)}
+        .btn-modal-book:hover{background:var(--gold-dark)}
+
+        @media(max-width:640px){
+            .modal-box{max-height:95vh}
+            .modal-header{padding:20px 20px 0}
+            .modal-body{padding:16px 20px 20px}
+            .modal-footer{padding:0 20px 20px}
+            .testi-grid{grid-template-columns:1fr}
+        }
 
         /* ── CTA ── */
         .cta-section{background:var(--ink);padding:96px 48px;text-align:center;position:relative;overflow:hidden}
@@ -369,90 +550,251 @@
 <!-- TESTIMONIALS -->
 <section class="section section-alt" id="testimonials">
     <div style="max-width:1200px;margin:0 auto">
-        <div class="section-header" style="text-align:center">
+
+        {{-- Section Header --}}
+        <div class="section-header" style="text-align:center;margin-bottom:48px">
             <div class="section-eyebrow" style="justify-content:center">Testimoni</div>
-            <h2 class="section-title">Kata Klien Kami</h2>
+            <h2 class="section-title">Apa Kata Mereka</h2>
+            <p class="testi-section-subtitle">Testimoni nyata dari pelanggan setia kami</p>
+            @if($testimonials->count() > 0)
+                <div class="testi-count-badge" style="margin-top:14px;display:inline-flex">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    {{ $testimonials->count() }} Ulasan
+                </div>
+            @endif
         </div>
-        <div class="testi-grid">
-            <div class="testi-card">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">"Studio sangat profesional, pencahayaan lengkap dan tim sangat membantu. Hasil foto jauh melampaui ekspektasi saya!"</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">AR</div>
-                    <div><div class="testi-name">Arya Ramadhan</div><div class="testi-meta">Photo Personal Session</div></div>
+
+        {{-- Success Alert --}}
+        @if(session('testimonial_success'))
+            <div class="alert-testi-success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                {{ session('testimonial_success') }}
+            </div>
+        @endif
+
+        {{-- Testimonial Cards --}}
+        @if($testimonials->isEmpty())
+            <div class="testi-grid">
+                <div class="testi-empty-wrap">
+                    <div class="testi-empty-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <div class="testi-empty-title">Belum Ada Testimoni</div>
+                    <p class="testi-empty-sub">Jadilah yang pertama berbagi pengalaman Anda!</p>
+                    @auth
+                        <a href="#testiForm" class="btn-be-first">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+                            Tulis Testimoni
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn-be-first">Masuk &amp; Beri Testimoni</a>
+                    @endauth
                 </div>
             </div>
-            <div class="testi-card">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">"Tempat yang sempurna untuk foto wisuda. Background pilihan banyak, staf ramah dan hasil editing sangat memuaskan."</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">SR</div>
-                    <div><div class="testi-name">Siti Rahayu</div><div class="testi-meta">Graduation Photo</div></div>
-                </div>
+        @else
+            <div class="testi-grid">
+                @foreach($testimonials as $t)
+                    <div class="testi-card">
+                        <div class="testi-quote-icon">&ldquo;</div>
+
+                        {{-- Stars per-span for individual coloring --}}
+                        <div class="testi-stars">
+                            @for($i = 1; $i <= 5; $i++)
+                                <span class="{{ $i <= $t->rating ? 's-on' : 's-off' }}">★</span>
+                            @endfor
+                        </div>
+
+                        <p class="testi-text">{{ $t->comment }}</p>
+
+                        <div class="testi-author">
+                            <div class="testi-avatar">
+                                {{ strtoupper(substr($t->user?->name ?? 'U', 0, 1)) }}
+                            </div>
+                            <div>
+                                <div class="testi-name">{{ $t->user?->name ?? 'Pengguna' }}</div>
+                                <div class="testi-meta">{{ $t->created_at->format('d M Y') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-            <div class="testi-card">
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">"Produksi video company profile kami sangat berkualitas. Virtual Imagination benar-benar paham kebutuhan brand kami."</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">DK</div>
-                    <div><div class="testi-name">Dimas Kurniawan</div><div class="testi-meta">Corporate Video Production</div></div>
+        @endif
+
+        {{-- Form kirim testimoni (user login) --}}
+        @auth
+            <div class="testi-form-wrap" id="testiForm">
+                <div class="testi-form-header">
+                    <div class="testi-form-title">Bagikan Pengalaman Anda</div>
+                    <div class="testi-form-sub">Ulasan Anda sangat berarti bagi kami dan calon pelanggan lainnya.</div>
                 </div>
+                <form method="POST" action="{{ route('testimonials.store') }}" id="testiFormEl" novalidate>
+                    @csrf
+
+                    {{-- Star Rating --}}
+                    <div class="testi-form-row">
+                        <label>Rating <span style="color:#DC2626">*</span></label>
+                        <input type="hidden" name="rating" id="ratingValue" value="{{ old('rating', '') }}">
+                        <div class="star-picker-wrap">
+                            <div class="star-picker" id="starPicker">
+                                @for($s = 1; $s <= 5; $s++)
+                                    <label data-val="{{ $s }}" title="{{ $s }} bintang" aria-label="Beri {{ $s }} bintang">★</label>
+                                @endfor
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+                                <div class="star-hint">Klik bintang untuk memberi rating</div>
+                                <div class="star-label-text hidden" id="starLabelText"></div>
+                            </div>
+                        </div>
+                        @error('rating')
+                            <div class="field-error">⚠ {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    {{-- Comment --}}
+                    <div class="testi-form-row">
+                        <label for="testi-comment">Komentar <span style="color:#DC2626">*</span></label>
+                        <textarea
+                            id="testi-comment"
+                            name="comment"
+                            placeholder="Ceritakan pengalaman Anda bersama Virtual Imagination — sesi foto, pelayanan, hasil karya…"
+                            required maxlength="1000"
+                            oninput="document.getElementById('charCount').textContent = this.value.length + '/1000'"
+                        >{{ old('comment') }}</textarea>
+                        <div class="char-count" id="charCount">{{ strlen(old('comment','')) }}/1000</div>
+                        @error('comment')
+                            <div class="field-error">⚠ {{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="testi-form-footer">
+                        <button type="submit" class="btn-submit-testi">
+                            Kirim Testimoni
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </button>
+                        <span class="testi-form-note">Data Anda aman &amp; tidak dibagikan</span>
+                    </div>
+                </form>
             </div>
-        </div>
+        @else
+            <div class="testi-login-note">
+                <a href="{{ route('login') }}">Masuk</a> untuk berbagi pengalaman Anda bersama kami.
+            </div>
+        @endauth
     </div>
 </section>
+
 
 <!-- STUDIO RENT -->
 <section class="section section-alt" id="studio-rent">
-    <div class="section-header">
-        <div class="section-eyebrow">Studio Rent</div>
-        <h2 class="section-title">Paket Studio Kami</h2>
-        <p class="section-subtitle">Pilih paket yang sesuai dengan kebutuhan sesi foto Anda. Semua paket sudah termasuk peralatan lighting profesional.</p>
-    </div>
+    <div style="max-width:1200px;margin:0 auto">
+        <div class="section-header">
+            <div class="section-eyebrow">Studio Rent</div>
+            <h2 class="section-title">Paket Studio Kami</h2>
+            <p class="section-subtitle">Pilih paket yang sesuai dengan kebutuhan sesi foto Anda. Semua paket sudah termasuk peralatan lighting profesional.</p>
+        </div>
 
-    <div class="packages-grid">
-        @forelse($packages as $pkg)
-            <div class="pkg-card">
-                @if($pkg->thumbnail)
-                    <img class="pkg-thumbnail" src="{{ asset('storage/'.$pkg->thumbnail) }}" alt="{{ $pkg->name }}">
-                @else
-                    <div class="pkg-thumbnail-placeholder">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                    </div>
-                @endif
-                <div class="pkg-body">
-                    <div class="pkg-name">{{ $pkg->name }}</div>
-                    <div class="pkg-duration">
-                        @php
-                            $mins = $pkg->duration_minutes;
-                            $dur  = $mins >= 60
-                                ? floor($mins/60).' jam'.($mins%60 ? ' '.($mins%60).' mnt' : '')
-                                : $mins.' menit';
-                        @endphp
-                        {{ $dur }}
-                    </div>
-                    <div class="pkg-desc">{{ $pkg->description ?: 'Paket studio profesional dengan peralatan lengkap dan pencahayaan premium.' }}</div>
-                    <div class="pkg-footer">
-                        <div class="pkg-price">
-                            <small>Mulai dari</small>
-                            {{ $pkg->getFormattedPrice() }}
+        <div class="packages-grid">
+            @forelse($packages as $pkg)
+                @php $preview = $pkg->getDescriptionPreview(3); @endphp
+                <div class="pkg-card">
+                    @if($pkg->thumbnail)
+                        <img class="pkg-thumbnail" src="{{ asset('storage/'.$pkg->thumbnail) }}" alt="{{ $pkg->name }}">
+                    @else
+                        <div class="pkg-thumbnail-placeholder">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
                         </div>
-                        @auth
-                            <a href="{{ route('bookings.create', ['package' => $pkg->id]) }}" class="btn-book">Book Now</a>
+                    @endif
+                    <div class="pkg-body">
+                        <div class="pkg-name">{{ $pkg->name }}</div>
+                        <div class="pkg-duration">
+                            {{ $pkg->getFormattedDuration() }}
+                            @if($pkg->category) · {{ $pkg->category }}@endif
+                        </div>
+                        @if(!empty($preview))
+                            <ul class="pkg-desc-list">
+                                @foreach($preview as $point)
+                                    <li>{{ $point }}</li>
+                                @endforeach
+                            </ul>
                         @else
-                            <a href="{{ route('login') }}" class="btn-book">Book Now</a>
-                        @endauth
+                            <div class="pkg-desc">Paket studio profesional dengan peralatan lengkap dan pencahayaan premium.</div>
+                        @endif
+                        <div class="pkg-footer">
+                            <div class="pkg-price">
+                                <small>Mulai dari</small>
+                                {{ $pkg->getFormattedPrice() }}
+                            </div>
+                            <div class="pkg-btn-group">
+                                <button class="btn-detail"
+                                    onclick="openPkgModal({{ $pkg->id }})"
+                                    data-id="{{ $pkg->id }}">Lihat Detail</button>
+                                @auth
+                                    <a href="{{ route('bookings.create', ['package' => $pkg->id]) }}" class="btn-book">Book</a>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn-book">Book</a>
+                                @endauth
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @empty
-            <div class="pkg-empty">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                <p>Paket studio belum tersedia. Hubungi kami untuk informasi lebih lanjut.</p>
-            </div>
-        @endforelse
+            @empty
+                <div class="pkg-empty">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                    <p>Paket studio belum tersedia. Hubungi kami untuk informasi lebih lanjut.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 </section>
+
+<!-- PACKAGE DETAIL MODAL -->
+<div class="modal-overlay" id="pkgModal" role="dialog" aria-modal="true">
+    <div class="modal-box" id="pkgModalBox">
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle">—</div>
+            <button class="modal-close" onclick="closePkgModal()" aria-label="Tutup">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-price">
+                <small>Harga</small>
+                <span id="modalPrice">—</span>
+            </div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div id="modalDescWrap" style="display:none">
+                <div class="modal-section-title">Termasuk dalam Paket</div>
+                <ul class="modal-list" id="modalDescList"></ul>
+            </div>
+            <div id="modalBonusWrap" style="display:none">
+                <div class="modal-section-title">Bonus</div>
+                <ul class="modal-list modal-bonus-list" id="modalBonusList"></ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn-modal-book" id="modalBookBtn">Book Now →</a>
+        </div>
+    </div>
+</div>
+
+{{-- JSON data for all packages — encoded server-side for safety --}}
+@php
+    $pkgJson = $packages->map(fn($p) => [
+        'id'          => $p->id,
+        'name'        => $p->name,
+        'price'       => $p->getFormattedPrice(),
+        'duration'    => $p->getFormattedDuration(),
+        'category'    => $p->category,
+        'max_person'  => $p->max_person,
+        'description' => is_array($p->description) ? $p->description : [],
+        'bonus'       => is_array($p->bonus) ? $p->bonus : [],
+        'book_url'    => auth()->check()
+                            ? route('bookings.create', ['package' => $p->id])
+                            : route('login'),
+    ])->values()->all();
+@endphp
+<script id="pkgData" type="application/json">@json($pkgJson)</script>
+
 
 <!-- PORTFOLIO — dynamic from DB -->
 <section class="section" id="portfolio">
@@ -696,6 +1038,155 @@ function sendToWhatsApp() {
     const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank');
 }
+
+// ── PACKAGE MODAL ─────────────────────────────────────────────────────────────
+const _pkgData = JSON.parse(document.getElementById('pkgData')?.textContent || '[]');
+// Key by string for safe lookup regardless of how id is passed
+const _pkgMap  = Object.fromEntries(_pkgData.map(p => [String(p.id), p]));
+
+function openPkgModal(id) {
+    const p = _pkgMap[String(id)];
+    if (!p) return;
+
+    document.getElementById('modalTitle').textContent = p.name;
+    document.getElementById('modalPrice').textContent  = p.price;
+
+    // Meta chips
+    const meta = document.getElementById('modalMeta');
+    meta.innerHTML = '';
+    const metaItems = [
+        { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>', label: p.duration },
+        p.category ? { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>', label: p.category } : null,
+        p.max_person ? { icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', label: 'Maks. ' + p.max_person + ' orang' } : null,
+    ].filter(Boolean);
+    metaItems.forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'modal-meta-item';
+        chip.innerHTML = item.icon + item.label;
+        meta.appendChild(chip);
+    });
+
+    // Description
+    const descWrap = document.getElementById('modalDescWrap');
+    const descList = document.getElementById('modalDescList');
+    if (p.description && p.description.length > 0) {
+        descList.innerHTML = p.description.map(d => `<li>${d}</li>`).join('');
+        descWrap.style.display = 'block';
+    } else {
+        descWrap.style.display = 'none';
+    }
+
+    // Bonus
+    const bonusWrap = document.getElementById('modalBonusWrap');
+    const bonusList = document.getElementById('modalBonusList');
+    if (p.bonus && p.bonus.length > 0) {
+        bonusList.innerHTML = p.bonus.map(b => `<li>${b}</li>`).join('');
+        bonusWrap.style.display = 'block';
+    } else {
+        bonusWrap.style.display = 'none';
+    }
+
+    // Book URL
+    document.getElementById('modalBookBtn').href = p.book_url;
+
+    const overlay = document.getElementById('pkgModal');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePkgModal() {
+    document.getElementById('pkgModal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// Close on overlay click (outside modal box)
+document.getElementById('pkgModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closePkgModal();
+});
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closePkgModal();
+});
+
+// ── STAR RATING INTERACTIVE ───────────────────────────────────────────────────
+(function () {
+    const picker      = document.getElementById('starPicker');
+    const hiddenInput = document.getElementById('ratingValue');
+    const labelText   = document.getElementById('starLabelText');
+    if (!picker || !hiddenInput) return;
+
+    const labels = Array.from(picker.querySelectorAll('label'));
+    const ratingNames = ['', 'Sangat Buruk', 'Buruk', 'Cukup', 'Bagus', 'Luar Biasa!'];
+
+    // Current committed value
+    let currentVal = parseInt(hiddenInput.value) || 0;
+
+    /** Paint labels 1..val as gold/selected, rest as outline */
+    function paint(val) {
+        labels.forEach(lbl => {
+            const v = parseInt(lbl.dataset.val);
+            lbl.classList.toggle('selected', v <= val);
+            lbl.classList.remove('hovered');
+        });
+    }
+
+    /** Update descriptive text label */
+    function updateLabel(val) {
+        if (labelText) {
+            if (val > 0) {
+                labelText.textContent = ratingNames[val] || '';
+                labelText.classList.remove('hidden');
+            } else {
+                labelText.classList.add('hidden');
+            }
+        }
+    }
+
+    labels.forEach(lbl => {
+        const v = parseInt(lbl.dataset.val);
+
+        lbl.addEventListener('mouseenter', () => {
+            labels.forEach(l => {
+                const lv = parseInt(l.dataset.val);
+                l.classList.toggle('hovered', lv <= v);
+                l.classList.remove('selected');
+            });
+            updateLabel(v);
+        });
+
+        lbl.addEventListener('mouseleave', () => {
+            paint(currentVal);
+            updateLabel(currentVal);
+        });
+
+        lbl.addEventListener('click', () => {
+            currentVal = v;
+            hiddenInput.value = v;
+            paint(v);
+            updateLabel(v);
+        });
+    });
+
+    // Form submit guard
+    const form = document.getElementById('testiFormEl');
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            if (!hiddenInput.value || hiddenInput.value === '0') {
+                e.preventDefault();
+                picker.style.boxShadow = '0 0 0 2px #DC2626';
+                setTimeout(() => picker.style.boxShadow = '', 2000);
+                picker.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                alert('Silakan pilih rating bintang terlebih dahulu.');
+            }
+        });
+    }
+
+    // Restore old('rating') on page load
+    paint(currentVal);
+    updateLabel(currentVal);
+})();
 </script>
 </body>
 </html>
+
