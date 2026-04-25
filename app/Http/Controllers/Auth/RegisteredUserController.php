@@ -41,7 +41,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Kembali ke intended URL (misal: /bookings/create) atau dashboard
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Kembali ke intended URL (misal: /bookings/create) atau halaman utama
+        return redirect()->intended(route('home'));
     }
 }

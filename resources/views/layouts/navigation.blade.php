@@ -1,659 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Imagination PhotoStudio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-
-    @verbatim
-    <style>
-        /* ===== CSS VARIABLES ===== */
-        :root {
-            --gold:        #C9A94A;
-            --gold-light:  #E9CB5B;
-            --gold-pale:   #F5E9C0;
-            --gold-glow:   rgba(201,169,74,0.25);
-            --gold-shadow: rgba(201,169,74,0.18);
-            --ink:         #111111;
-            --ink-soft:    #3a3a3a;
-            --ink-muted:   #888;
-            --surface:     #FFFFFF;
-            --surface-2:   #FAFAF8;
-            --border:      rgba(201,169,74,0.15);
-            --nav-h:       88px;
-            --nav-h-sm:    64px;
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-spring:   cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* ===== RESET ===== */
-        *, *::before, *::after {
-            margin: 0; padding: 0;
-            box-sizing: border-box;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #fff;
-            color: var(--ink);
-            overflow-x: hidden;
-            min-height: 200vh;
-        }
-
-        /* ===== NAVBAR SHELL ===== */
-        .navbar {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            height: var(--nav-h);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 56px;
-            background: rgba(255,255,255,0.92);
-            backdrop-filter: blur(18px) saturate(160%);
-            -webkit-backdrop-filter: blur(18px) saturate(160%);
-            border-bottom: 1px solid transparent;
-            transition:
-                height 0.4s var(--ease-out-expo),
-                background 0.4s ease,
-                border-color 0.4s ease,
-                box-shadow 0.4s ease;
-            will-change: height, background;
-        }
-
-        .navbar.scrolled {
-            height: var(--nav-h-sm);
-            background: rgba(255,255,255,0.98);
-            border-bottom-color: var(--border);
-            box-shadow: 0 2px 32px rgba(0,0,0,0.06);
-        }
-
-        /* ===== LOGO ===== */
-        .navbar-logo a {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            outline: none;
-        }
-
-        .navbar-logo img {
-            height: 54px;
-            width: auto;
-            display: block;
-            transition: height 0.4s var(--ease-out-expo), filter 0.3s ease;
-            filter: drop-shadow(0 2px 8px var(--gold-shadow));
-        }
-
-        .navbar.scrolled .navbar-logo img {
-            height: 38px;
-        }
-
-        .navbar-logo img:hover {
-            filter: drop-shadow(0 4px 16px var(--gold-glow));
-        }
-
-        /* ===== MENU ===== */
-        .navbar-menu {
-            display: flex;
-            align-items: center;
-            gap: 70px;
-            list-style: none;
-            margin-left: 80px;
-        }
-
-        .navbar-menu > li {
-            position: relative;
-        }
-
-        .navbar-menu > li > a,
-        .navbar-menu > li > .nav-link {
-            font-weight: 600;
-            font-size: 17px;
-            letter-spacing: 0.14em;
-            color: var(--ink-soft);
-            text-decoration: none;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            text-transform: uppercase;
-            position: relative;
-            border: none;
-            background: none;
-            transition: color 0.25s ease;
-            white-space: nowrap;
-            user-select: none;
-        }
-
-        /* Gold underline swipe */
-        .navbar-menu > li > a::after,
-        .navbar-menu > li > .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            left: 20px;
-            right: 20px;
-            height: 1.5px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-light));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.35s var(--ease-out-expo);
-            border-radius: 2px;
-        }
-
-        .navbar-menu > li:hover > a,
-        .navbar-menu > li:hover > .nav-link,
-        .navbar-menu > li.active > a,
-        .navbar-menu > li.active > .nav-link {
-            color: var(--gold);
-        }
-
-        .navbar-menu > li:hover > a::after,
-        .navbar-menu > li:hover > .nav-link::after,
-        .navbar-menu > li.active > a::after,
-        .navbar-menu > li.active > .nav-link::after {
-            transform: scaleX(1);
-        }
-
-        /* Arrow */
-        .nav-arrow {
-            font-size: 9px;
-            opacity: 0.6;
-            transition: transform 0.3s var(--ease-spring), opacity 0.3s ease;
-            display: inline-block;
-        }
-
-        .navbar-menu > li:hover > .nav-link .nav-arrow,
-        .navbar-menu > li:hover > a .nav-arrow {
-            transform: rotate(180deg);
-            opacity: 1;
-        }
-
-        /* ===== DROPDOWN ===== */
-        .dropdown-menu {
-            position: absolute;
-            top: calc(100% + 12px);
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: var(--surface);
-            min-width: 200px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            box-shadow:
-                0 4px 6px -1px rgba(0,0,0,0.04),
-                0 12px 40px -4px rgba(0,0,0,0.10),
-                0 0 0 1px rgba(255,255,255,0.8) inset;
-            padding: 8px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition:
-                opacity 0.3s var(--ease-out-expo),
-                transform 0.35s var(--ease-out-expo),
-                visibility 0.3s;
-        }
-
-        .dropdown-menu::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px; height: 12px;
-            background: var(--surface);
-            border-left: 1px solid var(--border);
-            border-top: 1px solid var(--border);
-            rotate: 45deg;
-            border-radius: 2px 0 0 0;
-        }
-
-        .navbar-menu > li:hover > .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-            pointer-events: auto;
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 14px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--ink-soft);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dropdown-menu a::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--gold), var(--gold-light));
-            border-radius: 0 2px 2px 0;
-            transform: scaleY(0);
-            transition: transform 0.2s var(--ease-spring);
-        }
-
-        .dropdown-menu a:hover {
-            background: var(--gold-pale);
-            color: var(--gold);
-            padding-left: 20px;
-        }
-
-        .dropdown-menu a:hover::before {
-            transform: scaleY(1);
-        }
-
-        .dropdown-menu a:nth-child(1) { transition-delay: 0.02s; }
-        .dropdown-menu a:nth-child(2) { transition-delay: 0.04s; }
-        .dropdown-menu a:nth-child(3) { transition-delay: 0.06s; }
-        .dropdown-menu a:nth-child(4) { transition-delay: 0.08s; }
-
-        /* ===== AUTH AREA ===== */
-        .navbar-auth {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-shrink: 0;
-        }
-
-        /* LOGIN BUTTON */
-        .btn-login {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--gold);
-            color: #fff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 700;
-            font-size: 11.5px;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 11px 22px;
-            border-radius: 50px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            overflow: hidden;
-            transition: transform 0.25s var(--ease-spring), box-shadow 0.3s ease;
-            box-shadow: 0 4px 18px var(--gold-shadow);
-        }
-
-        .btn-login::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -80%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-            transform: skewX(-20deg);
-            transition: left 0.5s ease;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 28px rgba(201,169,74,0.35);
-        }
-
-        .btn-login:hover::before {
-            left: 140%;
-        }
-
-        .btn-login:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        /* ===== PROFILE SECTION ===== */
-        .profile-dropdown {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 6px 14px 6px 6px;
-            border-radius: 50px;
-            border: 1px solid var(--border);
-            background: var(--surface-2);
-            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
-            user-select: none;
-        }
-
-        .profile-dropdown:hover {
-            border-color: var(--gold);
-            background: var(--gold-pale);
-            box-shadow: 0 4px 16px var(--gold-shadow);
-        }
-
-        .profile-avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
-            letter-spacing: 0;
-            flex-shrink: 0;
-            box-shadow: 0 2px 8px var(--gold-shadow);
-            overflow: hidden;
-            transition: box-shadow 0.3s;
-        }
-
-        .profile-avatar img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-dropdown:hover .profile-avatar {
-            box-shadow: 0 4px 14px rgba(201,169,74,0.4);
-        }
-
-        .profile-name {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--ink);
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .profile-arrow {
-            font-size: 9px;
-            color: var(--ink-muted);
-            transition: transform 0.3s var(--ease-spring);
-        }
-
-        .profile-dropdown:hover .profile-arrow {
-            transform: rotate(180deg);
-            color: var(--gold);
-        }
-
-        /* Profile dropdown menu */
-        .profile-dropdown-menu {
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: var(--surface);
-            min-width: 220px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow:
-                0 4px 6px -1px rgba(0,0,0,0.04),
-                0 16px 48px -4px rgba(0,0,0,0.12);
-            padding: 10px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: translateY(12px) scale(0.97);
-            transform-origin: top right;
-            transition:
-                opacity 0.3s var(--ease-out-expo),
-                transform 0.35s var(--ease-spring),
-                visibility 0.3s;
-        }
-
-        .profile-dropdown:hover .profile-dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateY(0) scale(1);
-        }
-
-        .profile-menu-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px 12px;
-            border-bottom: 1px solid rgba(201,169,74,0.12);
-            margin-bottom: 6px;
-        }
-
-        .profile-menu-avatar {
-            width: 38px; height: 38px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .profile-menu-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-        }
-
-        .profile-menu-name {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: var(--ink);
-        }
-
-        .profile-menu-role {
-            font-size: 11px;
-            color: var(--ink-muted);
-            font-weight: 400;
-        }
-
-        .profile-dropdown-menu a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 12px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--ink-soft);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .profile-dropdown-menu a:hover {
-            background: var(--gold-pale);
-            color: var(--gold);
-        }
-
-        .menu-icon {
-            width: 16px; height: 16px;
-            opacity: 0.5;
-            transition: opacity 0.2s;
-            flex-shrink: 0;
-        }
-
-        .profile-dropdown-menu a:hover .menu-icon {
-            opacity: 1;
-        }
-
-        .divider {
-            height: 1px;
-            background: rgba(201,169,74,0.12);
-            margin: 6px 0;
-        }
-
-        .logout {
-            color: #c0392b !important;
-            font-weight: 600 !important;
-        }
-
-        .logout:hover {
-            background: #fff5f5 !important;
-            color: #a93226 !important;
-        }
-
-        /* ===== MOBILE HAMBURGER ===== */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s;
-            border: none;
-            background: none;
-        }
-
-        .hamburger:hover { background: var(--gold-pale); }
-
-        .hamburger span {
-            display: block;
-            width: 24px; height: 2px;
-            background: var(--ink);
-            border-radius: 2px;
-            transition: all 0.35s var(--ease-spring);
-        }
-
-        .hamburger.open span:nth-child(1) {
-            transform: translateY(7px) rotate(45deg);
-            background: var(--gold);
-        }
-        .hamburger.open span:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        .hamburger.open span:nth-child(3) {
-            transform: translateY(-7px) rotate(-45deg);
-            background: var(--gold);
-        }
-
-        /* ===== MOBILE DRAWER ===== */
-        .mobile-drawer {
-            position: fixed;
-            top: 0; right: 0;
-            width: 300px; height: 100vh;
-            background: var(--surface);
-            border-left: 1px solid var(--border);
-            box-shadow: -20px 0 60px rgba(0,0,0,0.12);
-            z-index: 1100;
-            padding: 100px 24px 40px;
-            transform: translateX(100%);
-            transition: transform 0.45s var(--ease-out-expo);
-            overflow-y: auto;
-        }
-
-        .mobile-drawer.open {
-            transform: translateX(0);
-        }
-
-        .drawer-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
-            z-index: 1099;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-
-        .drawer-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .drawer-item {
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(201,169,74,0.08);
-            font-weight: 600;
-            font-size: 20px;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--ink-soft);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .drawer-sub {
-            padding: 6px 0 6px 16px;
-            display: none;
-        }
-
-        .drawer-sub a {
-            display: block;
-            padding: 8px 0;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--ink-muted);
-            text-decoration: none;
-        }
-
-        .drawer-sub a:hover { color: var(--gold); }
-        .drawer-sub.open { display: block; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
-            .navbar { padding: 0 28px; }
-            .navbar-menu { display: none; }
-            .hamburger { display: flex; }
-        }
-
-        @media (max-width: 640px) {
-            .navbar-logo img { height: 40px; }
-            .navbar.scrolled .navbar-logo img { height: 80px; }
-        }
-
-        /* ===== ENTRANCE ANIMATION ===== */
-        @keyframes navSlideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to   { transform: translateY(0);     opacity: 1; }
-        }
-
-        .navbar {
-            animation: navSlideDown 0.6s var(--ease-out-expo) both;
-        }
-
-        @keyframes logoPulse {
-            0%   { filter: drop-shadow(0 0 0px transparent); }
-            50%  { filter: drop-shadow(0 0 20px rgba(233,203,91,0.5)); }
-            100% { filter: drop-shadow(0 2px 8px var(--gold-shadow)); }
-        }
-
-        .navbar-logo img {
-            animation: logoPulse 1.2s 0.6s ease-in-out both;
-        }
-    </style>
-    @endverbatim
-
-</head>
-<body>
-
-<!-- ===== MOBILE OVERLAY ===== -->
+{{-- ===== MOBILE OVERLAY ===== --}}
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
 
-<!-- ===== MOBILE DRAWER ===== -->
+{{-- ===== MOBILE DRAWER ===== --}}
 <div class="mobile-drawer" id="mobileDrawer">
     <div class="drawer-item" onclick="toggleSub('sub-home')">
         HOME <span class="nav-arrow">▾</span>
     </div>
 
     <div class="drawer-item" onclick="toggleSub('sub-studio')">
-        STUDIO RENT <span class="nav-arrow">▾</span>
+        <a href="#studio-rent" style="color:inherit;text-decoration:none;">STUDIO RENT</a>
     </div>
 
     <div class="drawer-item" onclick="toggleSub('sub-port')">
-        PORTOFOLIO <span class="nav-arrow">▾</span>
+        <a href="#portfolio" style="color:inherit;text-decoration:none;">PORTOFOLIO</a>
     </div>
 
     <div class="drawer-item"><a href="#" style="color:inherit;text-decoration:none;">CONTACT</a></div>
@@ -667,12 +26,11 @@
                 <div class="profile-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
                 <div>
                     <div style="font-size:13px;font-weight:700;">{{ Auth::user()->name }}</div>
-                    <a href="/profile" style="font-size:12px;color:#C9A94A;text-decoration:none;">View Profile →</a>
+                    <a href="{{ route('profile.edit') }}" style="font-size:12px;color:#C9A94A;text-decoration:none;">View Profile →</a>
                 </div>
             </div>
             <div style="margin-top:12px;display:flex;flex-direction:column;gap:4px;">
-                <a href="/bookings" style="padding:10px 14px;font-size:13px;font-weight:500;color:#3a3a3a;text-decoration:none;border-radius:8px;display:block;">My Bookings</a>
-                <a href="/settings" style="padding:10px 14px;font-size:13px;font-weight:500;color:#3a3a3a;text-decoration:none;border-radius:8px;display:block;">Settings</a>
+                <a href="{{ route('bookings.index') }}" style="padding:10px 14px;font-size:13px;font-weight:500;color:#3a3a3a;text-decoration:none;border-radius:8px;display:block;">My Bookings</a>
                 <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
                     @csrf
                     <a onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
@@ -685,42 +43,36 @@
     </div>
 </div>
 
-<!-- ===== NAVBAR ===== -->
+{{-- ===== NAVBAR ===== --}}
 <nav class="navbar" id="mainNavbar">
 
-    <!-- Logo -->
+    {{-- Logo --}}
     <div class="navbar-logo">
         <a href="/">
             <img src="{{ asset('images/tanpa_teks.png') }}" alt="Virtual Imagination Logo">
         </a>
     </div>
 
-    <!-- Desktop Menu -->
+    {{-- Desktop Menu --}}
     <ul class="navbar-menu">
-        <li class="dropdown">
-            <span class="nav-link">
-                HOME
-            </span>
-        </li>
-
-        <li class="dropdown">
-            <span class="nav-link">
-                STUDIO RENT
-            </span>
-        </li>
-
-        <li class="dropdown">
-            <span class="nav-link">
-                PORTOFOLIO
-            </span>
+        <li>
+            <a href="/" class="nav-link">HOME</a>
         </li>
 
         <li>
-            <a href="#">CONTACT</a>
+            <a href="#studio-rent" class="nav-link">STUDIO RENT</a>
+        </li>
+
+        <li>
+            <a href="#portfolio" class="nav-link">PORTOFOLIO</a>
+        </li>
+
+        <li>
+            <a href="#contact" class="nav-link">CONTACT</a>
         </li>
     </ul>
 
-    <!-- Auth -->
+    {{-- Auth --}}
     <div class="navbar-auth">
         @guest
             <a href="/login" class="btn-login">LOGIN / REGISTER</a>
@@ -739,7 +91,7 @@
                 <span class="profile-arrow">▾</span>
 
                 <div class="profile-dropdown-menu">
-                    <!-- Header -->
+                    {{-- Header --}}
                     <div class="profile-menu-header">
                         <div class="profile-menu-avatar">
                             {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
@@ -750,17 +102,17 @@
                         </div>
                     </div>
 
-                    <a href="/profile">
+                    <a href="{{ route('profile.edit') }}">
                         <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         My Profile
                     </a>
-                    <a href="/bookings">
+                    <a href="{{ route('bookings.index') }}">
                         <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         My Bookings
                     </a>
-                    <a href="/settings">
-                        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-                        Settings
+                    <a href="{{ route('dashboard') }}">
+                        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        Dashboard
                     </a>
 
                     <div class="divider"></div>
@@ -778,7 +130,7 @@
             </div>
         @endauth
 
-        <!-- Hamburger (mobile) -->
+        {{-- Hamburger (mobile) --}}
         <button class="hamburger" id="hamburgerBtn" onclick="toggleDrawer()" aria-label="Menu">
             <span></span>
             <span></span>
@@ -787,14 +139,11 @@
     </div>
 </nav>
 
-
-<!-- ===== SCRIPTS ===== -->
+{{-- ===== SCRIPTS ===== --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const navbar   = document.getElementById('mainNavbar');
     const hamburger = document.getElementById('hamburgerBtn');
-    const drawer   = document.getElementById('mobileDrawer');
-    const overlay  = document.getElementById('drawerOverlay');
 
     /* 1. SCROLL — shrink navbar */
     let lastScroll = 0;
@@ -901,18 +250,6 @@ function closeDrawer() {
 
 function toggleSub(id) {
     const sub = document.getElementById(id);
-    sub.classList.toggle('open');
+    if (sub) sub.classList.toggle('open');
 }
 </script>
-
-@verbatim
-<style>
-    /* Ripple keyframe */
-    @keyframes ripple {
-        to { transform: scale(2.5); opacity: 0; }
-    }
-</style>
-@endverbatim
-
-</body>
-</html>

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Received — Virtual Imagination</title>
+    <title>Booking Diterima — Virtual Imagination</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -19,9 +19,12 @@
             --text-lo:    #9E9E9E;
             --surface:    #FFFFFF;
             --surface-2:  #F7F6F3;
-            --surface-3:  #EFEFED;
             --border:     #E5E3DC;
             --border-hi:  #CCB049;
+            --success:    #2D7A4F;
+            --warning:    #B45309;
+            --danger:     #C0392B;
+            --wa-green:   #25D366;
             --transition: .22s cubic-bezier(.4,0,.2,1);
         }
 
@@ -43,7 +46,7 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             width: 100%;
-            max-width: 540px;
+            max-width: 560px;
             padding: 44px 40px 40px;
             box-shadow: 0 4px 32px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04);
             animation: fadeUp .4s both;
@@ -69,19 +72,15 @@
             flex: 1; text-align: center; font-size: 10px; font-weight: 600;
             letter-spacing: 4px; text-transform: uppercase; color: var(--text-lo);
         }
-        .header-avatar {
-            width: 40px; height: 40px; border: 1.5px solid var(--border-hi);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--gold); font-size: 18px;
-        }
+        .header-spacer { width: 40px; }
 
         /* ── Check & Thank you ── */
-        .check-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 24px; }
+        .check-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
         .check-circle {
-            width: 60px; height: 60px; border-radius: 50%;
+            width: 64px; height: 64px; border-radius: 50%;
             border: 2px solid var(--gold); background: rgba(204,176,73,.08);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; color: var(--gold); margin-bottom: 16px;
+            font-size: 26px; color: var(--gold); margin-bottom: 18px;
             animation: pop .4s .1s both;
         }
         @keyframes pop {
@@ -96,27 +95,22 @@
             line-height: 1.2; margin-bottom: 10px;
         }
         .thank-you h1 em { color: var(--gold); font-style: normal; }
-        .thank-you p { font-size: 13px; color: var(--text-mid); line-height: 1.65; max-width: 340px; }
+        .thank-you p { font-size: 13px; color: var(--text-mid); line-height: 1.65; max-width: 360px; }
 
         /* ── Status Banner ── */
         .status-banner {
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 10px 18px; border-radius: 50px;
-            font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
-            margin: 0 auto 20px; width: fit-content;
+            padding: 8px 20px; border-radius: 50px;
+            font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+            margin: 16px auto 20px; width: fit-content;
         }
-        .status-banner.pending {
-            background: #FFF8E7; border: 1px solid #F5D76E; color: #8A6A00;
-        }
-        .status-banner.scheduled {
-            background: #E8F5E9; border: 1px solid #81C784; color: #2E7D32;
-        }
-        .status-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        .pending .status-dot  { background: #F5A623; }
-        .scheduled .status-dot { background: #4CAF50; }
+        .status-pending  { background: #FFF8E7; border: 1px solid #F5D76E; color: #8A6A00; }
+        .status-confirmed{ background: #E8F5EE; border: 1px solid #81C784; color: #2E7D32; }
+        .status-rejected { background: #FDECEA; border: 1px solid #EF9A9A; color: #C0392B; }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; animation: pulse 2s infinite; }
+        .status-pending  .status-dot  { background: #F5A623; }
+        .status-confirmed .status-dot { background: #4CAF50; }
+        .status-rejected  .status-dot { background: #EF5350; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
         /* ── Receipt Box ── */
@@ -130,68 +124,45 @@
             font-family: 'Cormorant Garamond', serif; font-size: 110px;
             font-weight: 700; color: rgba(0,0,0,.07); line-height: 1; pointer-events: none;
         }
-
         .receipt-top {
             display: flex; justify-content: space-between; align-items: flex-start;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .rl { font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,.45); margin-bottom: 3px; }
-        .rv { font-size: 18px; font-weight: 700; color: #0D0D0D; }
-
-        .pm-badge {
-            display: inline-flex; align-items: center; gap: 5px;
-            background: rgba(0,0,0,.12); border-radius: 50px;
-            padding: 4px 12px; font-size: 10px; font-weight: 700;
-            letter-spacing: 1px; text-transform: uppercase; color: #0D0D0D;
-        }
-
-        .rhr { border: none; border-top: 1px solid rgba(0,0,0,.15); margin: 14px 0; }
-
+        .rv { font-size: 18px; font-weight: 700; color: #0D0D0D; font-family: monospace; letter-spacing: .5px; }
+        .rhr { border: none; border-top: 1px solid rgba(0,0,0,.15); margin: 12px 0; }
         .service-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .sn { font-size: 14px; font-weight: 600; color: #0D0D0D; }
-        .sp { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #0D0D0D; }
-
-        .dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+        .sn { font-size: 15px; font-weight: 700; color: #0D0D0D; }
+        .sp { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: #0D0D0D; }
+        .dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
         .dt-item .dl { font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,.45); margin-bottom: 3px; }
         .dt-item .dv { font-size: 13px; font-weight: 700; color: #0D0D0D; display: flex; align-items: center; gap: 5px; }
+        .loc .dl { font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,.45); margin-bottom: 4px; }
+        .loc .lv { font-size: 12px; color: #0D0D0D; font-weight: 500; line-height: 1.5; display: flex; gap: 5px; }
 
-        .loc .dl { font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(0,0,0,.45); margin-bottom: 3px; }
-        .loc .lv { font-size: 11px; color: #0D0D0D; font-weight: 500; line-height: 1.5; display: flex; gap: 5px; }
+        /* ── WA CTA ── */
+        .wa-cta {
+            display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;
+        }
+        .btn-wa {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 15px; background: var(--wa-green); color: #fff;
+            border: none; border-radius: 50px; font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; text-decoration: none;
+            transition: all var(--transition);
+        }
+        .btn-wa:hover { background: #1EB858; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,.35); }
+        .btn-wa svg { width: 20px; height: 20px; flex-shrink: 0; }
 
-        /* ── Bukti Pembayaran ── */
-        .proof-section {
-            background: var(--surface-2); border: 1px solid var(--border);
-            border-radius: 12px; padding: 20px; margin-bottom: 20px;
-        }
-        .proof-title {
-            font-size: 10px; font-weight: 600; letter-spacing: 2px;
-            text-transform: uppercase; color: var(--text-lo); margin-bottom: 14px;
-        }
-        .proof-img-wrap { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
-        .proof-img-wrap img { width: 100%; max-height: 260px; object-fit: cover; display: block; }
-        .proof-footer {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 14px; background: #fff; border-top: 1px solid var(--border);
-        }
-        .proof-status {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 11px; font-weight: 600; color: #8A6A00;
-        }
-        .proof-status .dot { width: 6px; height: 6px; border-radius: 50%; background: #F5A623; }
-        .proof-note { font-size: 10px; color: var(--text-lo); }
-
-        /* ── Buttons ── */
-        .btns { display: flex; flex-direction: column; gap: 10px; }
-        .bn, .bh {
-            display: block; width: 100%; padding: 14px; border-radius: 50px;
-            font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+        .btn-secondary {
+            display: block; width: 100%; padding: 13px; border-radius: 50px;
+            font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
             cursor: pointer; text-align: center; font-family: 'DM Sans', sans-serif;
             text-decoration: none; box-sizing: border-box; transition: all var(--transition);
+            background: transparent; color: var(--text-hi); border: 1.5px solid var(--border);
         }
-        .bn { background: var(--gold); color: #fff; border: none; }
-        .bn:hover { background: var(--gold-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(204,176,73,.3); }
-        .bh { background: transparent; color: var(--text-hi); border: 1.5px solid var(--border); }
-        .bh:hover { border-color: var(--gold); color: var(--gold); }
+        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
 
         /* ── Info notice ── */
         .info-notice {
@@ -214,22 +185,26 @@
 
     <div class="header">
         <div class="logo-mark">V</div>
-        <div class="header-title">Booking Received</div>
-        <div class="header-avatar">&#x1F464;</div>
+        <div class="header-title">Booking Diterima</div>
+        <div class="header-spacer"></div>
     </div>
 
     <div class="check-wrap">
         <div class="check-circle">✓</div>
         <div class="thank-you">
-            <h1>Thankyou For<br>Choosing Our <em>Lens!</em></h1>
-            <p>Booking kamu sudah kami terima. Admin akan memverifikasi bukti pembayaranmu dan mengkonfirmasi jadwal sesegera mungkin.</p>
+            <h1>Terima Kasih Telah<br>Memilih <em>Studio Kami!</em></h1>
+            <p>Booking Anda telah tersimpan. Hubungi admin via WhatsApp untuk konfirmasi ketersediaan jadwal.</p>
         </div>
     </div>
 
     {{-- Status Badge --}}
-    <div class="status-banner {{ strtolower($booking->status) === 'scheduled' ? 'scheduled' : 'pending' }}">
+    @php $statusKey = strtolower($booking->status); @endphp
+    <div class="status-banner status-{{ $statusKey }}">
         <span class="status-dot"></span>
-        {{ $booking->status === 'Pending' ? 'Menunggu Verifikasi' : ucfirst($booking->status) }}
+        @if($statusKey === 'pending') Menunggu Konfirmasi Admin
+        @elseif($statusKey === 'confirmed') Dikonfirmasi
+        @else {{ ucfirst($statusKey) }}
+        @endif
     </div>
 
     {{-- Receipt --}}
@@ -239,19 +214,16 @@
                 <div class="rl">Booking Reference</div>
                 <div class="rv">{{ $booking->booking_reference }}</div>
             </div>
-            <div class="pm-badge">
-                @if($booking->payment_method === 'transfer')
-                    🏦 Transfer
-                @else
-                    📱 QRIS
-                @endif
+            <div style="text-align:right">
+                <div class="rl">Dibuat</div>
+                <div style="font-size:12px;font-weight:600;color:#0D0D0D">{{ $booking->created_at->format('d M Y') }}</div>
             </div>
         </div>
 
         <div class="rhr"></div>
 
         <div class="service-row">
-            <span class="sn">{{ $booking->service }}</span>
+            <span class="sn">{{ $booking->package->name ?? $booking->service }}</span>
             <span class="sp">Rp{{ number_format((float)$booking->price, 0, ',', '.') }}</span>
         </div>
 
@@ -259,18 +231,16 @@
 
         <div class="dt-grid">
             <div class="dt-item">
-                <div class="dl">Date</div>
+                <div class="dl">Tanggal</div>
                 <div class="dv">📅 {{ $booking->booking_date ? $booking->booking_date->format('d M Y') : 'N/A' }}</div>
             </div>
             <div class="dt-item">
-                <div class="dl">Time</div>
+                <div class="dl">Waktu</div>
                 <div class="dv">
                     ⏱
                     @if($booking->booking_time)
-                        {{ \Carbon\Carbon::createFromTimeString($booking->booking_time)->format('h:i A') }}
-                    @else
-                        N/A
-                    @endif
+                        {{ \Carbon\Carbon::createFromTimeString($booking->booking_time)->format('H:i') }} WIB
+                    @else N/A @endif
                 </div>
             </div>
         </div>
@@ -278,7 +248,7 @@
         <div class="rhr"></div>
 
         <div class="loc">
-            <div class="dl">Location</div>
+            <div class="dl">Lokasi Studio</div>
             <div class="lv">
                 <span>📍</span>
                 <span>Ngorsesan, Gg. Cahaya 4 Jl. Kartika No.66,<br>Kota Surakarta, Jawa Tengah 57126</span>
@@ -286,35 +256,34 @@
         </div>
     </div>
 
-    {{-- Bukti Pembayaran --}}
-    @if($booking->payment_proof)
-    <div class="proof-section">
-        <div class="proof-title">Bukti Pembayaran</div>
-        <div class="proof-img-wrap">
-            <img src="{{ asset('storage/' . $booking->payment_proof) }}" alt="Bukti pembayaran">
-            <div class="proof-footer">
-                <div class="proof-status">
-                    <span class="dot"></span>
-                    Menunggu verifikasi admin
-                </div>
-                <span class="proof-note">Diupload {{ $booking->created_at->diffForHumans() }}</span>
-            </div>
-        </div>
-    </div>
-    @endif
-
-    {{-- Buttons --}}
-    <div class="btns">
-        <a href="{{ route('bookings.index') }}" class="bn">Lihat Semua Booking Saya</a>
-        <a href="{{ route('bookings.create') }}" class="bh">Buat Booking Baru</a>
-        <a href="/" class="bh">Kembali ke Beranda</a>
+    {{-- WhatsApp CTA --}}
+    <div class="wa-cta">
+        @isset($waUrl)
+            <a href="{{ $waUrl }}" target="_blank" class="btn-wa" id="wa-btn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                Konfirmasi via WhatsApp Sekarang
+            </a>
+        @endisset
+        <a href="{{ route('bookings.index') }}" class="btn-secondary">Lihat Semua Booking Saya</a>
+        <a href="{{ route('home') }}" class="btn-secondary">Kembali ke Beranda</a>
     </div>
 
     <div class="info-notice">
         <span style="font-size:14px;flex-shrink:0">ℹ️</span>
-        <p>Booking kamu akan dikonfirmasi setelah admin memverifikasi pembayaran. Referensi: <strong>{{ $booking->booking_reference }}</strong>. Untuk pertanyaan, hubungi admin kami.</p>
+        <p>Admin akan mengkonfirmasi ketersediaan jadwal setelah Anda menghubungi via WhatsApp. Simpan referensi booking Anda: <strong>{{ $booking->booking_reference }}</strong>.</p>
     </div>
 
 </div>
+
+@isset($waUrl)
+<script>
+    // Auto-open WhatsApp setelah 1.5 detik agar user sempat melihat konfirmasi
+    window.addEventListener('load', function () {
+        setTimeout(function () {
+            window.open("{{ $waUrl }}", '_blank');
+        }, 1500);
+    });
+</script>
+@endisset
 </body>
 </html>
