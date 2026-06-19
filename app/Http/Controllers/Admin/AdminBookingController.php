@@ -4,15 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\PaymentSetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AdminBookingController extends Controller
 {
-    /** Status yang diperbolehkan (enum: pending | confirmed | rejected) */
-    private const ALLOWED_STATUSES = ['pending', 'confirmed', 'rejected'];
-
     /**
      * Daftar semua booking dengan pagination + filter status.
      */
@@ -20,12 +18,10 @@ class AdminBookingController extends Controller
     {
         $query = Booking::with(['user', 'package'])->latest();
 
-        // Filter opsional berdasarkan status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filter opsional berdasarkan search nama/email
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -50,32 +46,58 @@ class AdminBookingController extends Controller
     }
 
     /**
-     * Update status booking (pending / confirmed / rejected / scheduled).
+     * Setujui jadwal booking (menunggu_konfirmasi → menunggu_pembayaran).
      */
-    public function updateStatus(Request $request, Booking $booking): RedirectResponse
+    public function approve(Booking $booking): RedirectResponse
     {
-        $request->validate([
-            'status' => ['required', 'in:' . implode(',', self::ALLOWED_STATUSES)],
+        abort_unless($booking->status === Booking::STATUS_MENUNGGU_KONFIRMASI, 422,
+            'Hanya booking dengan status "Menunggu Konfirmasi" yang dapat disetujui.');
+
+        $booking->update(['status' => Booking::STATUS_MENUNGGU_PEMBAYARAN]);
+
+        return back()->with('success', "Jadwal booking #{$booking->booking_reference} telah disetujui. User dapat melakukan pembayaran.");
+    }
+
+    /**
+     * Tolak jadwal booking (menunggu_konfirmasi → ditolak).
+     */
+    public function reject(Booking $booking): RedirectResponse
+    {
+        abort_unless($booking->status === Booking::STATUS_MENUNGGU_KONFIRMASI, 422,
+            'Hanya booking dengan status "Menunggu Konfirmasi" yang dapat ditolak.');
+
+        $booking->update(['status' => Booking::STATUS_DITOLAK]);
+
+        return back()->with('success', "Booking #{$booking->booking_reference} telah ditolak.");
+    }
+
+    /**
+     * Verifikasi pembayaran (menunggu_verifikasi → terkonfirmasi).
+     */
+    public function verifyPayment(Booking $booking): RedirectResponse
+    {
+        abort_unless($booking->status === Booking::STATUS_MENUNGGU_VERIFIKASI, 422,
+            'Hanya booking dengan status "Menunggu Verifikasi" yang dapat diverifikasi.');
+
+        $booking->update(['status' => Booking::STATUS_TERKONFIRMASI]);
+
+        return back()->with('success', "Pembayaran booking #{$booking->booking_reference} telah diverifikasi. Booking terkonfirmasi!");
+    }
+
+    /**
+     * Tolak pembayaran (menunggu_verifikasi → pembayaran_ditolak).
+     */
+    public function rejectPayment(Request $request, Booking $booking): RedirectResponse
+    {
+        abort_unless($booking->status === Booking::STATUS_MENUNGGU_VERIFIKASI, 422,
+            'Hanya booking dengan status "Menunggu Verifikasi" yang dapat ditolak pembayarannya.');
+
+        $booking->update([
+            'status'        => Booking::STATUS_PEMBAYARAN_DITOLAK,
+            'payment_proof' => null, // reset bukti agar user upload ulang
         ]);
 
-        // ── Anti double-booking: cek konflik jika status diubah ke 'confirmed' ──
-        if ($request->status === 'confirmed') {
-            $conflict = Booking::where('id', '!=', $booking->id)
-                ->where('status', 'confirmed')
-                ->where('booking_date', $booking->booking_date)
-                ->where('booking_time', $booking->booking_time)
-                ->exists();
-
-            if ($conflict) {
-                return back()->withErrors(['status' =>
-                    'Tidak dapat dikonfirmasi: sudah ada booking lain yang dikonfirmasi pada tanggal dan jam yang sama.'
-                ]);
-            }
-        }
-
-        $booking->update(['status' => $request->status]);
-
-        return back()->with('success', "Status booking #{$booking->booking_reference} berhasil diubah menjadi «{$request->status}».");
+        return back()->with('success', "Pembayaran booking #{$booking->booking_reference} ditolak. User diminta upload ulang bukti transfer.");
     }
 
     /**

@@ -16,9 +16,10 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $packages     = Package::active()->orderBy('price')->get();
-        $portfolios   = Portfolio::active()->ordered()->get();
-        $testimonials = Testimonial::active()->with('user')->latest()->get();
+        $packages          = Package::active()->orderBy('price')->get();
+        $portfolios        = Portfolio::active()->ordered()->get();
+        $testimonials      = Testimonial::active()->with('user')->latest()->get();
+        $aboutPortfolios   = Portfolio::inAbout()->latest()->take(3)->get();
 
         // Detect section route name so view can auto-scroll
         $section = match ($request->route()->getName()) {
@@ -28,6 +29,6 @@ class HomeController extends Controller
             default      => null,
         };
 
-        return view('welcome', compact('packages', 'portfolios', 'testimonials', 'section'));
+        return view('welcome', compact('packages', 'portfolios', 'testimonials', 'section', 'aboutPortfolios'));
     }
 }

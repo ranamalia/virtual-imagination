@@ -404,7 +404,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         Profile
                     </a>
-                    <a href="{{ route('bookings.index') }}" class="dropdown-item">
+                    <a href="{{ route('profile.edit', ['tab' => 'bookings']) }}" class="dropdown-item">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         Riwayat Booking
                     </a>
@@ -495,15 +495,29 @@
             </div>
             <div class="about-visual">
                 <div class="about-img-grid">
-                    <div class="about-img-box">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                    </div>
-                    <div class="about-img-box">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                    </div>
-                    <div class="about-img-box">
-                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                    </div>
+                    @if($aboutPortfolios->isEmpty())
+                        {{-- Empty state: no portfolios selected yet --}}
+                        <div class="about-img-box" style="grid-column:1/-1;flex-direction:column;gap:12px">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(180,170,140,.5)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                            <span style="font-size:12px;color:rgba(180,170,140,.6);text-align:center;line-height:1.5">Belum ada foto dipilih.<br>Pilih foto di Admin → Portofolio → Tampilkan di Tentang Kami.</span>
+                        </div>
+                    @else
+                        @foreach($aboutPortfolios as $idx => $ap)
+                            <div class="about-img-box" style="{{ $idx === 0 ? 'grid-column:1/-1;aspect-ratio:16/7' : 'aspect-ratio:4/3' }}">
+                                <img src="{{ asset('storage/' . $ap->image) }}"
+                                     alt="{{ $ap->title }}"
+                                     style="width:100%;height:100%;object-fit:cover;display:block">
+                            </div>
+                        @endforeach
+                        {{-- Fill remaining slots with neutral placeholder if < 3 photos --}}
+                        @for($f = $aboutPortfolios->count(); $f < 3; $f++)
+                            @if($f > 0)
+                            <div class="about-img-box" style="aspect-ratio:4/3">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(180,170,140,.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                            </div>
+                            @endif
+                        @endfor
+                    @endif
                 </div>
                 <div class="about-badge">
                     <strong>500+</strong>

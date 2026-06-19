@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div style="margin-top:12px;display:flex;flex-direction:column;gap:4px;">
-                <a href="{{ route('bookings.index') }}" style="padding:10px 14px;font-size:13px;font-weight:500;color:#3a3a3a;text-decoration:none;border-radius:8px;display:block;">My Bookings</a>
+                <a href="{{ route('profile.edit', ['tab' => 'bookings']) }}" style="padding:10px 14px;font-size:13px;font-weight:500;color:#3a3a3a;text-decoration:none;border-radius:8px;display:block;">📋 Riwayat Booking</a>
                 <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
                     @csrf
                     <a onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();"
@@ -106,7 +106,7 @@
                         <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         My Profile
                     </a>
-                    <a href="{{ route('bookings.index') }}">
+                    <a href="{{ route('profile.edit', ['tab' => 'bookings']) }}">
                         <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                         My Bookings
                     </a>

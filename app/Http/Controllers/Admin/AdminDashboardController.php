@@ -16,9 +16,9 @@ class AdminDashboardController extends Controller
     {
         // ── Statistik ─────────────────────────────────────────────────────────
         $totalBookings     = Booking::count();
-        $pendingBookings   = Booking::where('status', 'pending')->count();
-        $confirmedBookings = Booking::where('status', 'confirmed')->count();
-        $rejectedBookings  = Booking::where('status', 'rejected')->count();
+        $pendingBookings   = Booking::where('status', Booking::STATUS_MENUNGGU_KONFIRMASI)->count();
+        $verifyBookings    = Booking::where('status', Booking::STATUS_MENUNGGU_VERIFIKASI)->count();
+        $confirmedBookings = Booking::where('status', Booking::STATUS_TERKONFIRMASI)->count();
         $totalUsers        = User::where('role', 'user')->count();
         $totalPackages     = Package::where('is_active', true)->count();
 
@@ -28,9 +28,12 @@ class AdminDashboardController extends Controller
             ->take(10)
             ->get();
 
-        // ── Booking Pending yang perlu tindakan segera ─────────────────────────
+        // ── Booking yang perlu tindakan admin segera ──────────────────────────
         $pendingList = Booking::with(['user', 'package'])
-            ->where('status', 'pending')
+            ->whereIn('status', [
+                Booking::STATUS_MENUNGGU_KONFIRMASI,
+                Booking::STATUS_MENUNGGU_VERIFIKASI,
+            ])
             ->latest()
             ->take(5)
             ->get();
@@ -38,8 +41,8 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard', compact(
             'totalBookings',
             'pendingBookings',
+            'verifyBookings',
             'confirmedBookings',
-            'rejectedBookings',
             'totalUsers',
             'totalPackages',
             'recentBookings',

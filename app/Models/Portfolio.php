@@ -9,12 +9,13 @@ class Portfolio extends Model
     protected $fillable = [
         'title', 'category', 'description',
         'image', 'client', 'is_featured',
-        'is_active', 'sort_order',
+        'show_in_about', 'is_active', 'sort_order',
     ];
 
     protected $casts = [
-        'is_featured' => 'boolean',
-        'is_active'   => 'boolean',
+        'is_featured'   => 'boolean',
+        'show_in_about' => 'boolean',
+        'is_active'     => 'boolean',
     ];
 
     /** Only active items */
@@ -23,10 +24,16 @@ class Portfolio extends Model
         return $query->where('is_active', true);
     }
 
-    /** Featured items first, then by sort_order */
+    /** Featured items */
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
+    }
+
+    /** Items flagged for About section */
+    public function scopeInAbout($query)
+    {
+        return $query->where('is_active', true)->where('show_in_about', true);
     }
 
     /** Ordered for display */

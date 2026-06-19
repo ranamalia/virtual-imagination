@@ -40,20 +40,22 @@ class AdminPortfolioController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'category'    => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'client'      => ['nullable', 'string', 'max:255'],
-            'image'       => ['required', 'image', 'max:4096'],
-            'is_featured' => ['boolean'],
-            'is_active'   => ['boolean'],
-            'sort_order'  => ['integer', 'min:0'],
+            'title'         => ['required', 'string', 'max:255'],
+            'category'      => ['required', 'string'],
+            'description'   => ['nullable', 'string'],
+            'client'        => ['nullable', 'string', 'max:255'],
+            'image'         => ['required', 'image', 'max:4096'],
+            'is_featured'   => ['boolean'],
+            'show_in_about' => ['boolean'],
+            'is_active'     => ['boolean'],
+            'sort_order'    => ['integer', 'min:0'],
         ]);
 
-        $data['image']       = $request->file('image')->store('portfolios', 'public');
-        $data['is_featured'] = $request->boolean('is_featured');
-        $data['is_active']   = $request->boolean('is_active', true);
-        $data['sort_order']  = $request->input('sort_order', 0);
+        $data['image']          = $request->file('image')->store('portfolios', 'public');
+        $data['is_featured']    = $request->boolean('is_featured');
+        $data['show_in_about']  = $request->boolean('show_in_about');
+        $data['is_active']      = $request->boolean('is_active', true);
+        $data['sort_order']     = $request->input('sort_order', 0);
 
         Portfolio::create($data);
 
@@ -70,14 +72,15 @@ class AdminPortfolioController extends Controller
     public function update(Request $request, Portfolio $portfolio): RedirectResponse
     {
         $data = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'category'    => ['required', 'string'],
-            'description' => ['nullable', 'string'],
-            'client'      => ['nullable', 'string', 'max:255'],
-            'image'       => ['nullable', 'image', 'max:4096'],
-            'is_featured' => ['boolean'],
-            'is_active'   => ['boolean'],
-            'sort_order'  => ['integer', 'min:0'],
+            'title'         => ['required', 'string', 'max:255'],
+            'category'      => ['required', 'string'],
+            'description'   => ['nullable', 'string'],
+            'client'        => ['nullable', 'string', 'max:255'],
+            'image'         => ['nullable', 'image', 'max:4096'],
+            'is_featured'   => ['boolean'],
+            'show_in_about' => ['boolean'],
+            'is_active'     => ['boolean'],
+            'sort_order'    => ['integer', 'min:0'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -85,9 +88,10 @@ class AdminPortfolioController extends Controller
             $data['image'] = $request->file('image')->store('portfolios', 'public');
         }
 
-        $data['is_featured'] = $request->boolean('is_featured');
-        $data['is_active']   = $request->boolean('is_active');
-        $data['sort_order']  = $request->input('sort_order', 0);
+        $data['is_featured']    = $request->boolean('is_featured');
+        $data['show_in_about']  = $request->boolean('show_in_about');
+        $data['is_active']      = $request->boolean('is_active');
+        $data['sort_order']     = $request->input('sort_order', 0);
 
         $portfolio->update($data);
 

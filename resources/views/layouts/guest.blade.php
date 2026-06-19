@@ -210,7 +210,6 @@
         <!-- Branding Panel -->
         <div class="auth-logo-section">
             <div class="logo-container">
-                <img src="{{ asset('images/logo.png') }}" alt="Virtual Imagination" onerror="this.style.display='none'">
                 <div class="brand-name">Virtual<br><span>Imagination</span></div>
                 <div class="brand-divider"></div>
                 <div class="brand-tagline">Professional Photo Studio</div>

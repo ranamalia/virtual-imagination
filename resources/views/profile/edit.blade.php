@@ -18,6 +18,9 @@
             --border: #E5E3DC; --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px;
             --danger: #C0392B; --danger-bg: #FDECEA;
             --success: #2D7A4F; --success-bg: #E8F5EE;
+            --warning: #92400E; --warning-bg: #FEF3C7;
+            --info: #1E5FA8;   --info-bg:    #EBF3FB;
+            --purple: #6D28D9; --purple-bg:  #EDE9FE;
             --transition: .22s cubic-bezier(.4,0,.2,1);
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -399,6 +402,15 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </span>
             </button>
+            <button class="fs-nav-btn" data-tab="bookings">
+                <span class="fs-nav-icon">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </span>
+                Riwayat Booking
+                <span class="fs-nav-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </span>
+            </button>
             <button class="fs-nav-btn fs-nav-danger" data-tab="delete">
                 <span class="fs-nav-icon">
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
@@ -427,13 +439,21 @@
 
         {{-- Mobile nav tabs --}}
         <div class="fs-mobile-tabs">
-            <button class="fs-mob-tab active" data-tab="profile">Profile &amp; Password</button>
+            <button class="fs-mob-tab active"     data-tab="profile">Profile &amp; Password</button>
+            <button class="fs-mob-tab"             data-tab="bookings">📋 Riwayat Booking</button>
             <button class="fs-mob-tab fs-mob-danger" data-tab="delete">Delete Account</button>
         </div>
 
-        {{-- Panel: Profile + Password (merged) --}}
+        {{-- Panel: Profile + Password --}}
         <div class="fs-panel active" id="panel-profile">
             @include('profile.partials.update-profile-information-form')
+        </div>
+
+        {{-- Panel: Riwayat Booking --}}
+        <div class="fs-panel" id="panel-bookings">
+            <div class="fs-panel-inner" style="max-width:800px">
+                @include('profile.partials.booking-history')
+            </div>
         </div>
 
         {{-- Panel: Delete Account --}}
@@ -445,10 +465,15 @@
 </div>
 
 <script>
-    const tabs   = ['profile', 'delete'];
-    const titles = { profile: 'Profile & Password', delete: 'Delete Account' };
+    const tabs   = ['profile', 'bookings', 'delete'];
+    const titles = {
+        profile:  'Profile & Password',
+        bookings: 'Riwayat Booking',
+        delete:   'Delete Account'
+    };
 
     function activateTab(tab) {
+        if (!tabs.includes(tab)) return;
         document.querySelectorAll('.fs-nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
         document.querySelectorAll('.fs-mob-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
         tabs.forEach(t => {
@@ -456,12 +481,16 @@
             if (el) el.classList.toggle('active', t === tab);
         });
         const mt = document.getElementById('mobile-title');
-        if (mt) mt.textContent = titles[tab];
+        if (mt) mt.textContent = titles[tab] ?? '';
     }
 
     document.querySelectorAll('.fs-nav-btn, .fs-mob-tab').forEach(btn => {
         btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
+
+    // Activate tab from URL: profile.edit?tab=bookings
+    const _urlTab = new URLSearchParams(window.location.search).get('tab');
+    if (_urlTab) document.addEventListener('DOMContentLoaded', () => activateTab(_urlTab));
 
     @if($errors->userDeletion->isNotEmpty())
         document.addEventListener('DOMContentLoaded', () => activateTab('delete'));

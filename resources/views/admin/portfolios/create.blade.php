@@ -94,6 +94,10 @@
                 <label for="is_featured">Tampilkan sebagai Featured (ditampilkan pertama)</label>
             </div>
             <div class="form-row-check">
+                <input type="checkbox" id="show_in_about" name="show_in_about" value="1" {{ old('show_in_about') ? 'checked' : '' }}>
+                <label for="show_in_about">Tampilkan di Tentang Kami</label>
+            </div>
+            <div class="form-row-check">
                 <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
                 <label for="is_active">Aktif (tampil di halaman publik)</label>
             </div>

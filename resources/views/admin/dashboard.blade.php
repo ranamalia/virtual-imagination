@@ -106,9 +106,12 @@
             font-weight: 600;
             text-transform: capitalize;
         }
-        .badge-pending   { background: var(--warning-bg); color: var(--warning); }
-        .badge-confirmed { background: var(--success-bg); color: var(--success); }
-        .badge-rejected  { background: var(--danger-bg);  color: var(--danger);  }
+        .badge-menunggu_konfirmasi { background: var(--warning-bg); color: var(--warning); }
+        .badge-menunggu_pembayaran { background: var(--info-bg);    color: var(--info);    }
+        .badge-menunggu_verifikasi { background: #EDE9FE;           color: #6D28D9;        }
+        .badge-pembayaran_ditolak  { background: var(--danger-bg);  color: var(--danger);  }
+        .badge-terkonfirmasi       { background: var(--success-bg); color: var(--success); }
+        .badge-ditolak             { background: var(--danger-bg);  color: var(--danger);  }
 
         /* ── Pending Alert ───────────────────────────────── */
         .pending-alert {
@@ -171,7 +174,7 @@
             </div>
         </div>
 
-        <a href="{{ route('admin.bookings.index', ['status'=>'pending']) }}" class="stat-card" style="text-decoration:none">
+        <a href="{{ route('admin.bookings.index', ['status'=>'menunggu_konfirmasi']) }}" class="stat-card" style="text-decoration:none">
             <div class="stat-icon orange">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -183,7 +186,19 @@
             </div>
         </a>
 
-        <a href="{{ route('admin.bookings.index', ['status'=>'confirmed']) }}" class="stat-card" style="text-decoration:none">
+        <a href="{{ route('admin.bookings.index', ['status'=>'menunggu_verifikasi']) }}" class="stat-card" style="text-decoration:none">
+            <div class="stat-icon" style="background:#EDE9FE;color:#6D28D9">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                </svg>
+            </div>
+            <div>
+                <div class="stat-value" style="color:#6D28D9">{{ $verifyBookings }}</div>
+                <div class="stat-label">Verifikasi Bayar</div>
+            </div>
+        </a>
+
+        <a href="{{ route('admin.bookings.index', ['status'=>'terkonfirmasi']) }}" class="stat-card" style="text-decoration:none">
             <div class="stat-icon green">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -191,7 +206,7 @@
             </div>
             <div>
                 <div class="stat-value" style="color:var(--success)">{{ $confirmedBookings }}</div>
-                <div class="stat-label">Dikonfirmasi</div>
+                <div class="stat-label">Terkonfirmasi</div>
             </div>
         </a>
 
@@ -213,9 +228,9 @@
     <div class="pending-alert">
         <div class="pending-alert-header">
             <div class="pending-alert-title">
-                ⚡ {{ $pendingBookings }} Booking Menunggu Konfirmasi
+                ⚡ {{ $pendingBookings + $verifyBookings }} Booking Perlu Tindakan Admin
             </div>
-            <a href="{{ route('admin.bookings.index', ['status'=>'pending']) }}" class="section-link">Lihat semua →</a>
+            <a href="{{ route('admin.bookings.index') }}" class="section-link">Lihat semua →</a>
         </div>
         @foreach($pendingList as $pb)
             <a href="{{ route('admin.bookings.show', $pb) }}" class="pending-item">
@@ -267,8 +282,8 @@
                             <td>{{ $booking->package->name ?? $booking->service }}</td>
                             <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
                             <td>
-                                <span class="badge badge-{{ strtolower($booking->status) }}">
-                                    {{ ucfirst($booking->status) }}
+                                <span class="badge badge-{{ $booking->status }}">
+                                    {{ $booking->statusLabel() }}
                                 </span>
                             </td>
                             <td style="font-weight:600;color:var(--gold-dark)">
