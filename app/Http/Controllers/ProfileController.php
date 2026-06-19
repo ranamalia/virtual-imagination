@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Booking;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +13,19 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display the user's profile form (with embedded booking history).
      */
     public function edit(Request $request): View
     {
+        $bookings = $request->user()
+            ->bookings()
+            ->with('package')
+            ->latest()
+            ->paginate(8);
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user'     => $request->user(),
+            'bookings' => $bookings,
         ]);
     }
 

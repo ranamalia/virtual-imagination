@@ -147,7 +147,13 @@
                     </div>
                     <div class="package-body">
                         <div class="package-name">{{ $package->name }}</div>
-                        <div class="package-desc">{{ $package->description ?: '—' }}</div>
+                        @php
+                            $desc = $package->description;
+                            $descPreview = is_array($desc) && !empty($desc)
+                                ? implode(' · ', array_slice($desc, 0, 2))
+                                : (is_string($desc) && $desc ? $desc : '—');
+                        @endphp
+                        <div class="package-desc">{{ $descPreview }}</div>
                         <div class="package-meta">
                             <div class="package-price">Rp {{ number_format($package->price,0,',','.') }}</div>
                             <div class="package-duration">{{ $package->duration_minutes }} menit · {{ $package->bookings_count }} booking</div>

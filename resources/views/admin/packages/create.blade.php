@@ -11,7 +11,7 @@
 
         .form-card {
             background:var(--surface); border:1px solid var(--border);
-            border-radius:var(--radius-md); padding:32px; max-width:640px;
+            border-radius:var(--radius-md); padding:32px; max-width:680px;
         }
         .form-title {
             font-family:'Cormorant Garamond',serif; font-size:22px;
@@ -63,6 +63,15 @@
             color:var(--text-mid); text-decoration:none; transition: all var(--transition);
         }
         .btn-cancel:hover { border-color:var(--gold); color:var(--gold-dark); }
+
+        .section-divider {
+            border:none; border-top:1px solid var(--border);
+            margin:28px 0 24px;
+        }
+        .section-label {
+            font-size:11px; font-weight:700; letter-spacing:1px;
+            text-transform:uppercase; color:var(--gold-dark); margin-bottom:16px;
+        }
     </style>
 
     <a href="{{ route('admin.packages.index') }}" class="back-link">← Kembali ke Paket Foto</a>
@@ -73,7 +82,7 @@
         <form method="POST" action="{{ route('admin.packages.store') }}" enctype="multipart/form-data">
             @csrf
 
-            <!-- Nama -->
+            <!-- Nama Paket -->
             <div class="form-group">
                 <label class="form-label" for="name">Nama Paket <span>*</span></label>
                 <input type="text" id="name" name="name" class="form-input"
@@ -81,15 +90,37 @@
                 @error('name')<div class="form-error">{{ $message }}</div>@enderror
             </div>
 
+            <!-- Kategori -->
+            <div class="form-group">
+                <label class="form-label" for="category">Kategori</label>
+                <input type="text" id="category" name="category" class="form-input"
+                       value="{{ old('category') }}" placeholder="cth: Photography, Videography, Wedding">
+                <div class="form-hint">Kategori paket untuk filter tampilan.</div>
+                @error('category')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
             <!-- Deskripsi -->
             <div class="form-group">
-                <label class="form-label" for="description">Deskripsi</label>
-                <textarea id="description" name="description" class="form-input"
-                          placeholder="Deskripsi paket…">{{ old('description') }}</textarea>
+                <label class="form-label" for="description">Deskripsi / Benefit Paket</label>
+                <textarea id="description" name="description" class="form-input" rows="5"
+                          placeholder="Tulis satu poin per baris, contoh:&#10;Sesi foto 1 jam&#10;Akses 3 background&#10;Editing 10 foto">{{ old('description') }}</textarea>
+                <div class="form-hint">💡 Tulis <strong>satu poin per baris</strong>. Setiap baris akan ditampilkan sebagai bullet point.</div>
                 @error('description')<div class="form-error">{{ $message }}</div>@enderror
             </div>
 
-            <!-- Harga & Durasi -->
+            <!-- Bonus -->
+            <div class="form-group">
+                <label class="form-label" for="bonus">Bonus Paket</label>
+                <textarea id="bonus" name="bonus" class="form-input" rows="3"
+                          placeholder="Tulis satu bonus per baris, contoh:&#10;5 lembar cetak 4R&#10;Frame digital&#10;Softcopy high-res">{{ old('bonus') }}</textarea>
+                <div class="form-hint">💡 Bonus tambahan di luar benefit utama. Tulis satu item per baris.</div>
+                @error('bonus')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <hr class="section-divider">
+            <div class="section-label">Detail Sesi</div>
+
+            <!-- Harga, Durasi, Max Person -->
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="price">Harga (Rp) <span>*</span></label>
@@ -104,6 +135,16 @@
                     @error('duration_minutes')<div class="form-error">{{ $message }}</div>@enderror
                 </div>
             </div>
+            <div class="form-group">
+                <label class="form-label" for="max_person">Maks. Peserta</label>
+                <input type="number" id="max_person" name="max_person" class="form-input"
+                       value="{{ old('max_person') }}" min="1" placeholder="cth: 5">
+                <div class="form-hint">Jumlah orang maksimal yang bisa ikut dalam satu sesi.</div>
+                @error('max_person')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
+            <hr class="section-divider">
+            <div class="section-label">Media & Status</div>
 
             <!-- Thumbnail -->
             <div class="form-group">
@@ -119,7 +160,7 @@
                 <div class="toggle-wrap">
                     <input type="checkbox" id="is_active" name="is_active" class="toggle"
                            value="1" {{ old('is_active', true) ? 'checked' : '' }}>
-                    <label for="is_active" class="toggle-label">Paket Aktif (tampil di form booking)</label>
+                    <label for="is_active" class="toggle-label">Paket Aktif (tampil di halaman Studio Rent)</label>
                 </div>
                 @error('is_active')<div class="form-error">{{ $message }}</div>@enderror
             </div>

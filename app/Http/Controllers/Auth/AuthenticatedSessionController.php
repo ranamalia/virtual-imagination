@@ -35,7 +35,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Redirect regular user ke landing page (/ = beranda)
+        return redirect()->intended(route('home'));
     }
 
     /**

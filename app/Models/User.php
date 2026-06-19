@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Booking;
+use App\Models\Testimonial;
 
 class User extends Authenticatable
 {
@@ -66,5 +67,13 @@ class User extends Authenticatable
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Relasi ke testimonials.
+     */
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class);
     }
 }

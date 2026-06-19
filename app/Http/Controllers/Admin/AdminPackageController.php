@@ -46,15 +46,20 @@ class AdminPackageController extends Controller
     {
         $validated = $request->validate([
             'name'             => ['required', 'string', 'max:255', 'unique:packages,name'],
+            'category'         => ['nullable', 'string', 'max:100'],
             'description'      => ['nullable', 'string'],
+            'bonus'            => ['nullable', 'string'],
             'price'            => ['required', 'numeric', 'min:0'],
             'duration_minutes' => ['required', 'integer', 'min:1'],
+            'max_person'       => ['nullable', 'integer', 'min:1'],
             'is_active'        => ['boolean'],
             'thumbnail'        => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $validated['slug']      = Str::slug($validated['name']);
-        $validated['is_active'] = $request->boolean('is_active', true);
+        $validated['slug']        = Str::slug($validated['name']);
+        $validated['is_active']   = $request->boolean('is_active', true);
+        $validated['description'] = $this->textToArray($request->input('description'));
+        $validated['bonus']       = $this->textToArray($request->input('bonus'));
 
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('packages', 'public');
@@ -81,15 +86,20 @@ class AdminPackageController extends Controller
     {
         $validated = $request->validate([
             'name'             => ['required', 'string', 'max:255', "unique:packages,name,{$package->id}"],
+            'category'         => ['nullable', 'string', 'max:100'],
             'description'      => ['nullable', 'string'],
+            'bonus'            => ['nullable', 'string'],
             'price'            => ['required', 'numeric', 'min:0'],
             'duration_minutes' => ['required', 'integer', 'min:1'],
+            'max_person'       => ['nullable', 'integer', 'min:1'],
             'is_active'        => ['boolean'],
             'thumbnail'        => ['nullable', 'image', 'max:2048'],
         ]);
 
-        $validated['slug']      = Str::slug($validated['name']);
-        $validated['is_active'] = $request->boolean('is_active');
+        $validated['slug']        = Str::slug($validated['name']);
+        $validated['is_active']   = $request->boolean('is_active');
+        $validated['description'] = $this->textToArray($request->input('description'));
+        $validated['bonus']       = $this->textToArray($request->input('bonus'));
 
         if ($request->hasFile('thumbnail')) {
             $validated['thumbnail'] = $request->file('thumbnail')->store('packages', 'public');
@@ -111,5 +121,20 @@ class AdminPackageController extends Controller
 
         return redirect()->route('admin.packages.index')
             ->with('success', "Paket \"{$name}\" berhasil dihapus.");
+    }
+
+    /**
+     * Convert newline-separated textarea text into a filtered array.
+     * Returns null if input is blank.
+     */
+    private function textToArray(?string $text): ?array
+    {
+        if (blank($text)) return null;
+
+        $lines = array_filter(
+            array_map('trim', explode("\n", str_replace("\r\n", "\n", $text)))
+        );
+
+        return empty($lines) ? null : array_values($lines);
     }
 }
